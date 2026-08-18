@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+audit-out/
+funnel-out/
+calibrate-out/
+.pytest_cache/
+.DS_Store

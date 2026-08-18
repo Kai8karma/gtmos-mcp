@@ -1,0 +1,31 @@
+[project]
+name = "gtmos-mcp"
+version = "0.3.0"
+description = "Read-only CRM audit for Claude over MCP: score data integrity, find duplicate clusters and stalled revenue, in your environment through your own token."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Kai (Kai8karma)" }]
+requires-python = ">=3.11"
+dependencies = []
+keywords = ["mcp", "model-context-protocol", "crm", "hubspot", "audit", "claude"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://kai8karma.github.io/agentkai/"
+Repository = "https://github.com/Kai8karma/gtmos-mcp"
+
+[project.scripts]
+gtmos = "gtmos.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["gtmos*"]
