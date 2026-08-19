@@ -134,3 +134,7 @@ python -m pytest tests/
 ## License
 
 [MIT](LICENSE)
+
+---
+
+mcp-name: io.github.kai8karma/gtmos-mcp
