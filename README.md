@@ -143,4 +143,4 @@ python -m pytest tests/
 
 ---
 
-mcp-name: io.github.kai8karma/gtmos-mcp
+mcp-name: io.github.Kai8karma/gtmos-mcp
