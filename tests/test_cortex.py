@@ -186,3 +186,129 @@ def test_routing_sla_breach_signal_flags_untouched_old_contact():
     sla_signal = next(s for s in rich_signals.signals if s.name == "routing_sla_breach")
     assert sla_signal.count > 0
     assert sla_signal.top_offenders
+
+
+# ---------------------------------------------------------------------------
+# regression: routing breach denominator must include untouched-past-SLA
+# contacts, not just contacts that resolved to an actual touch
+# ---------------------------------------------------------------------------
+
+
+def test_routing_majority_never_touched_scores_serious_not_healthy():
+    # 9 of 10 contacts were never touched at all, created ~1000h before NOW
+    # (well past the 24h SLA) - a textbook "nothing is getting routed"
+    # cohort. The 1 remaining contact was touched fast (2h, well inside the
+    # SLA). Every contact has an owner, so the owner sub-component of the
+    # dimension is a clean 100 and cannot mask the routing-latency signal.
+    contacts = [
+        _contact(
+            email="touched@acme.com", owner="rep1",
+            createdate="2026-08-16T00:00:00Z", notes_last_contacted="2026-08-16T02:00:00Z",
+        )
+    ]
+    for i in range(9):
+        contacts.append(
+            _contact(
+                email=f"cold{i}@acme.com", owner="rep1",
+                createdate="2026-07-08T00:00:00Z", notes_last_contacted=None,
+            )
+        )
+
+    result = engine.run_engine(contacts, [], sla_hours=24, now=NOW)
+    dim = result.dimensions["routing"]
+    assert dim.score is not None
+
+    # Pre-fix formula: breach_pct was computed only over contacts that
+    # resolved to an actual touch, so the 9 never-touched contacts fell out
+    # of the denominator entirely and the single prompt touch (0 breaches
+    # out of 1 touched contact) made the cohort look perfect.
+    old_buggy_breach_pct = 0 / 1
+    old_buggy_score = max(0.0, 100.0 - old_buggy_breach_pct * 100.0)
+    assert engine.status_for(old_buggy_score) == "HEALTHY"
+
+    # Fixed formula: the denominator is touched contacts + untouched
+    # contacts already past the SLA, so the 9 cold contacts count as
+    # breaches and the same cohort is SERIOUS, clearly below the buggy score.
+    assert dim.status == "SERIOUS"
+    assert dim.score < old_buggy_score
+    assert abs(dim.score - 41.5) < 1e-9  # (100 - 90) * 0.65 + 100 * 0.35, weights renormalized to 1.0
+
+
+# ---------------------------------------------------------------------------
+# regression: composite renormalization stays proportional to
+# DIMENSION_WEIGHTS, not an equal split across whatever scored
+# ---------------------------------------------------------------------------
+
+
+def test_composite_stays_proportional_to_dimension_weights_not_equal_split():
+    dimensions = {
+        "data_quality": engine.Dimension(name="data_quality", score=None, status="INSUFFICIENT_DATA"),
+        "lifecycle": engine.Dimension(name="lifecycle", score=None, status="INSUFFICIENT_DATA"),
+        "routing": engine.Dimension(name="routing", score=90.0, status="HEALTHY"),
+        "automation": engine.Dimension(name="automation", score=60.0, status="WATCH"),
+        "reporting": engine.Dimension(name="reporting", score=30.0, status="SERIOUS"),
+    }
+    composite, used_weights, excluded = engine._composite(dimensions)
+
+    assert set(excluded) == {"data_quality", "lifecycle"}
+    # available weight total = 0.20 (routing) + 0.15 (automation) + 0.15 (reporting) = 0.50
+    assert abs(used_weights["routing"] - 0.40) < 1e-9
+    assert abs(used_weights["automation"] - 0.30) < 1e-9
+    assert abs(used_weights["reporting"] - 0.30) < 1e-9
+    assert abs(sum(used_weights.values()) - 1.0) < 1e-9
+    # proportional (20:15:15), not an equal 3-way split (which would put
+    # every one of these at 1/3 = 0.3333...)
+    assert used_weights["routing"] != used_weights["automation"]
+    equal_split = 1.0 / 3
+    assert abs(used_weights["routing"] - equal_split) > 1e-6
+
+    assert abs(composite - 63.0) < 1e-9  # 90*0.40 + 60*0.30 + 30*0.30
+
+
+# ---------------------------------------------------------------------------
+# regression: _percentile, known input/output
+# ---------------------------------------------------------------------------
+
+
+def test_percentile_known_values():
+    values = [10.0, 20.0, 30.0, 40.0, 50.0]
+    assert engine._percentile(values, 0) == 10.0
+    assert engine._percentile(values, 50) == 30.0
+    assert engine._percentile(values, 95) == 50.0
+    assert engine._percentile(values, 100) == 50.0
+    # order of the input must not matter - nearest-rank sorts internally
+    assert engine._percentile([50.0, 10.0, 30.0, 20.0, 40.0], 50) == 30.0
+    assert engine._percentile([], 50) == 0.0
+
+
+# ---------------------------------------------------------------------------
+# regression: reversed first-touch timestamps are corrupt, not "untouched"
+# ---------------------------------------------------------------------------
+
+
+def test_reversed_timestamp_excluded_from_routing_and_flagged_as_sync_failure():
+    contacts = [
+        _contact(
+            email="normal@acme.com", owner="rep1",
+            createdate="2026-08-15T00:00:00Z", notes_last_contacted="2026-08-15T04:00:00Z",
+        ),
+        _contact(
+            email="corrupt@acme.com", owner="rep1",
+            createdate="2026-08-15T00:00:00Z", notes_last_contacted="2026-08-01T00:00:00Z",  # before createdate
+        ),
+    ]
+
+    result = engine.run_engine(contacts, [], sla_hours=24, now=NOW)
+    dim = result.dimensions["routing"]
+    assert dim.score is not None
+    combined_evidence = " ".join(dim.evidence)
+    # only the normal contact is judged (0 breaches out of 1); the corrupt
+    # one is excluded entirely, not counted as untouched or as a breach
+    assert "0/1" in combined_evidence
+    assert "excluded as corrupt" in combined_evidence
+
+    signals = engine.compute_signals(contacts, [], sla_hours=24, now=NOW)
+    reversed_signal = next(s for s in signals.signals if s.name == "sync_failure_reversed_timestamps")
+    assert reversed_signal.count == 1
+    assert reversed_signal.top_offenders
+    assert any("corrupt@acme.com" in offender for offender in reversed_signal.top_offenders)

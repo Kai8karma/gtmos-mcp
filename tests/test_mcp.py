@@ -146,6 +146,29 @@ def test_ops_signals_missing_source_is_reported_as_content_not_crash():
     assert "contacts_file" in out["content"][0]["text"]
 
 
+def test_ops_signals_honors_explicit_sla_hours_zero(tmp_path):
+    # regression: `float(args.get("sla_hours") or DEFAULT)` used to silently
+    # replace an explicit 0 with the 24h default, since 0 is falsy.
+    src = tmp_path / "contacts.json"
+    src.write_text(json.dumps(CORTEX_CONTACTS), encoding="utf-8")
+    out = call_tool("ops_signals", {"contacts_file": str(src), "sla_hours": 0})
+    assert not out.get("isError"), out["content"][0]["text"]
+    assert "SLA threshold: 0h." in out["content"][0]["text"]
+
+
+def test_cortex_scorecard_honors_explicit_sla_hours_zero(tmp_path):
+    src = tmp_path / "contacts.json"
+    src.write_text(json.dumps(CORTEX_CONTACTS), encoding="utf-8")
+    out_dir = tmp_path / "out"
+    out = call_tool(
+        "cortex_scorecard",
+        {"contacts_file": str(src), "out_dir": str(out_dir), "sla_hours": 0},
+    )
+    assert not out.get("isError"), out["content"][0]["text"]
+    report_text = (out_dir / "ops-scorecard.md").read_text(encoding="utf-8")
+    assert "SLA threshold: 0h." in report_text
+
+
 def test_tools_call_routes_through_handle_message(tmp_path):
     src = tmp_path / "contacts.json"
     src.write_text(json.dumps(CONTACTS), encoding="utf-8")

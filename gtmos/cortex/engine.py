@@ -183,9 +183,14 @@ def _percentile(values: list[float], pct: float) -> float:
 
 def _first_touch_facts(contacts_raw: list[dict], now: datetime) -> list[dict]:
     """Per-contact first-touch facts, only for contacts whose createdate
-    parses. Each entry: label, created, touched (datetime | None),
-    touch_alias (str | None, only set when hours resolved), hours
-    (float | None, create-to-touch), age_hours (float, create-to-now)."""
+    parses. Each entry: label, created, touched (datetime | None, only set
+    when the touch is chronologically at or after create), touch_alias
+    (str | None, only set alongside touched), hours (float | None,
+    create-to-touch, only set alongside touched), age_hours (float,
+    create-to-now), reversed (bool, True when a first-touch value exists
+    but predates createdate - a corrupt record, excluded from routing
+    scoring entirely; see _routing_sla_verdict and
+    _signal_sync_failure_reversed_timestamps)."""
     facts = []
     for c in contacts_raw:
         _, created_raw = _first_present_value(c, CREATEDATE_ALIASES)
@@ -193,23 +198,63 @@ def _first_touch_facts(contacts_raw: list[dict], now: datetime) -> list[dict]:
         if created is None:
             continue
         alias, touch_raw = _first_present_value(c, FIRST_TOUCH_ALIASES)
-        touched = funnel_engine.parse_date(touch_raw) if touch_raw else None
+        touch_dt = funnel_engine.parse_date(touch_raw) if touch_raw else None
+        touched = None
+        touch_alias = None
         hours = None
-        if touched is not None:
-            delta = (touched - created).total_seconds() / 3600.0
+        is_reversed = False
+        if touch_dt is not None:
+            delta = (touch_dt - created).total_seconds() / 3600.0
             if delta >= 0:
-                hours = delta
+                touched, touch_alias, hours = touch_dt, alias, delta
+            else:
+                is_reversed = True
         facts.append(
             {
                 "label": _record_label(c),
                 "created": created,
-                "touched": touched if hours is not None else None,
-                "touch_alias": alias if hours is not None else None,
+                "touched": touched,
+                "touch_alias": touch_alias,
                 "hours": hours,
                 "age_hours": (now - created).total_seconds() / 3600.0,
+                "reversed": is_reversed,
             }
         )
     return facts
+
+
+def _routing_sla_verdict(contacts_raw: list[dict], sla_hours: float, now: datetime):
+    """Per-contact routing SLA verdict, shared by the routing dimension and
+    the routing_sla_breach signal so both apply the identical rule.
+
+    A contact only gets a breach/no-breach verdict when one is actually
+    possible: touched (any elapsed time counts, whether inside or past the
+    SLA), or untouched but already older than the SLA (a definite breach).
+    Untouched contacts still younger than the SLA are excluded - too early
+    to judge - and so are reversed-timestamp records (see
+    _first_touch_facts), which are corrupt, not "never touched".
+
+    Returns (facts, judged, breaches, reversed_facts). facts is the full
+    per-contact list from _first_touch_facts; judged and breaches are
+    subsets of facts, breaches subset of judged; reversed_facts is the
+    excluded corrupt subset.
+    """
+    facts = _first_touch_facts(contacts_raw, now)
+    reversed_facts = [f for f in facts if f["reversed"]]
+    judged: list[dict] = []
+    breaches: list[dict] = []
+    for f in facts:
+        if f["reversed"]:
+            continue
+        if f["hours"] is not None:
+            judged.append(f)
+            if f["hours"] > sla_hours:
+                breaches.append(f)
+        elif f["age_hours"] > sla_hours:
+            judged.append(f)
+            breaches.append(f)
+        # else: untouched and still younger than sla_hours - too early to judge, excluded
+    return facts, judged, breaches, reversed_facts
 
 
 def _never_populated_properties(contacts_raw: list[dict]):
@@ -301,25 +346,33 @@ def _dim_routing(contacts_raw: list[dict], sla_hours: float, now: datetime) -> D
     has_createdate = _key_ever_present(contacts_raw, CREATEDATE_ALIASES)
     has_touch = _key_ever_present(contacts_raw, FIRST_TOUCH_ALIASES)
     if has_createdate and has_touch:
-        resolved = [f for f in _first_touch_facts(contacts_raw, now) if f["hours"] is not None]
-        if resolved:
-            hours = [f["hours"] for f in resolved]
-            p50, p95 = _percentile(hours, 50), _percentile(hours, 95)
-            breach_pct = sum(1 for h in hours if h > sla_hours) / len(hours)
+        _facts, judged, breaches, reversed_facts = _routing_sla_verdict(contacts_raw, sla_hours, now)
+        reversed_note = (
+            f"; {len(reversed_facts)} record(s) excluded as corrupt (first-touch timestamp before createdate)"
+            if reversed_facts
+            else ""
+        )
+        if judged:
+            breach_pct = len(breaches) / len(judged)
             components.append((max(0.0, 100.0 - breach_pct * 100.0), 0.65))
-            counts: dict[str, int] = {}
-            for f in resolved:
-                counts[f["touch_alias"]] = counts.get(f["touch_alias"], 0) + 1
-            top_alias = max(counts, key=counts.get)
-            evidence.append(
-                f"first-touch signal used: {top_alias} ({counts[top_alias]}/{len(resolved)} of resolvable "
-                f"records); p50 {p50:.1f}h / p95 {p95:.1f}h to first touch vs {sla_hours:.0f}h SLA "
-                f"({breach_pct:.0%} breach)"
-            )
+            line = f"{len(breaches)}/{len(judged)} contacts judged breached the {sla_hours:.0f}h SLA ({breach_pct:.0%})"
+            touched = [f for f in judged if f["hours"] is not None]
+            if touched:
+                hours = [f["hours"] for f in touched]
+                p50, p95 = _percentile(hours, 50), _percentile(hours, 95)
+                counts: dict[str, int] = {}
+                for f in touched:
+                    counts[f["touch_alias"]] = counts.get(f["touch_alias"], 0) + 1
+                top_alias = max(counts, key=counts.get)
+                line += (
+                    f"; first-touch signal used: {top_alias} ({counts[top_alias]}/{len(touched)} touched "
+                    f"records); p50 {p50:.1f}h / p95 {p95:.1f}h to first touch"
+                )
+            evidence.append(line + reversed_note)
         else:
             evidence.append(
-                "createdate and a first-touch property both exist but no record has a valid pair of them - "
-                "SLA check skipped"
+                "no record has a definite SLA verdict yet (untouched contacts are all still within the SLA "
+                "window) - SLA check skipped" + reversed_note
             )
     else:
         missing = []
@@ -547,23 +600,28 @@ def _severity_for_rate(rate: float) -> str:
 def _signal_routing_sla(contacts_raw: list[dict], sla_hours: float, now: datetime) -> Signal:
     if not _key_ever_present(contacts_raw, CREATEDATE_ALIASES):
         return Signal("INFO", "routing_sla_breach", 0, "createdate not present anywhere in this export - skipped")
-    facts = _first_touch_facts(contacts_raw, now)
+    facts, judged, breaches, _reversed_facts = _routing_sla_verdict(contacts_raw, sla_hours, now)
     if not facts:
         return Signal("INFO", "routing_sla_breach", 0, "createdate present but not parseable on any record - skipped")
-    breaches: list[tuple[float, str]] = []
-    for f in facts:
-        if f["hours"] is not None and f["hours"] > sla_hours:
-            breaches.append((f["hours"], f"{f['label']} touched after {f['hours']:.1f}h (SLA {sla_hours:.0f}h)"))
-        elif f["hours"] is None and f["touched"] is None and f["age_hours"] > sla_hours:
-            breaches.append((f["age_hours"], f"{f['label']} created {f['age_hours']:.1f}h ago, still untouched"))
-    breaches.sort(key=lambda b: -b[0])
-    rate = len(breaches) / len(facts)
+    if not judged:
+        return Signal(
+            "INFO", "routing_sla_breach", 0,
+            "no record has a definite SLA verdict yet (untouched contacts are all still within the SLA window) - skipped",
+        )
+    offenders = sorted(breaches, key=lambda f: -(f["hours"] if f["hours"] is not None else f["age_hours"]))
+    top = []
+    for f in offenders[:5]:
+        if f["hours"] is not None:
+            top.append(f"{f['label']} touched after {f['hours']:.1f}h (SLA {sla_hours:.0f}h)")
+        else:
+            top.append(f"{f['label']} created {f['age_hours']:.1f}h ago, still untouched")
+    rate = len(breaches) / len(judged)
     return Signal(
         _severity_for_rate(rate),
         "routing_sla_breach",
         len(breaches),
-        f"{len(breaches)}/{len(facts)} contacts breached the {sla_hours:.0f}h SLA",
-        [msg for _, msg in breaches[:5]],
+        f"{len(breaches)}/{len(judged)} contacts breached the {sla_hours:.0f}h SLA",
+        top,
     )
 
 
@@ -666,6 +724,34 @@ def _signal_sync_failure_no_owner_recent(contacts_raw: list[dict], now: datetime
     )
 
 
+def _signal_sync_failure_reversed_timestamps(contacts_raw: list[dict], now: datetime) -> Signal:
+    """Records whose first-touch timestamp predates their createdate: a
+    corrupt pair, not a genuine "never touched" record (see
+    _first_touch_facts). Excluded from the routing dimension entirely;
+    surfaced here as its own sync-failure proxy."""
+    if not (_key_ever_present(contacts_raw, CREATEDATE_ALIASES) and _key_ever_present(contacts_raw, FIRST_TOUCH_ALIASES)):
+        return Signal(
+            "INFO", "sync_failure_reversed_timestamps", 0,
+            "createdate and/or a first-touch property not present anywhere in this export - skipped",
+        )
+    facts = _first_touch_facts(contacts_raw, now)
+    if not facts:
+        return Signal(
+            "INFO", "sync_failure_reversed_timestamps", 0,
+            "createdate present but not parseable on any record - skipped",
+        )
+    reversed_facts = [f for f in facts if f["reversed"]]
+    rate = len(reversed_facts) / len(facts)
+    return Signal(
+        _severity_for_rate(rate),
+        "sync_failure_reversed_timestamps",
+        len(reversed_facts),
+        f"{len(reversed_facts)}/{len(facts)} contacts have a first-touch timestamp before their createdate "
+        f"(touch logged before create)",
+        [f"{f['label']}: first-touch predates createdate" for f in reversed_facts[:5]],
+    )
+
+
 def compute_signals(
     contacts_raw: list[dict],
     deals: list[dict] | None = None,
@@ -681,5 +767,6 @@ def compute_signals(
         _signal_lifecycle_integrity(contacts_raw),
         _signal_sync_failure_malformed(contacts_raw),
         _signal_sync_failure_no_owner_recent(contacts_raw, now),
+        _signal_sync_failure_reversed_timestamps(contacts_raw, now),
     ]
     return SignalsResult(signals=signals, total_contacts=len(contacts_raw), total_deals=len(deals), sla_hours=sla_hours)

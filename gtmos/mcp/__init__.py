@@ -132,7 +132,8 @@ def _tool_cortex_scorecard(args: dict) -> str:
         except RuntimeError:
             deals = []  # deals are optional for the scorecard; a missing scope just drops the lifecycle pipeline check
 
-    sla_hours = float(args.get("sla_hours") or engine.DEFAULT_SLA_HOURS)
+    raw_sla_hours = args.get("sla_hours")
+    sla_hours = float(raw_sla_hours) if raw_sla_hours is not None else engine.DEFAULT_SLA_HOURS
     result = engine.run_engine(contacts_raw, deals, sla_hours=sla_hours)
     summary = report.render(result, args.get("out_dir") or "./cortex-out")
 
@@ -179,7 +180,8 @@ def _tool_ops_signals(args: dict) -> str:
         except RuntimeError:
             deals = []
 
-    sla_hours = float(args.get("sla_hours") or engine.DEFAULT_SLA_HOURS)
+    raw_sla_hours = args.get("sla_hours")
+    sla_hours = float(raw_sla_hours) if raw_sla_hours is not None else engine.DEFAULT_SLA_HOURS
     signals = engine.compute_signals(contacts_raw, deals, sla_hours=sla_hours)
 
     lines = [f"{signals.total_contacts} contacts, {signals.total_deals} deals scanned. SLA threshold: {sla_hours:.0f}h."]
