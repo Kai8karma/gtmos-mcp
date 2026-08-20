@@ -21,6 +21,12 @@ An MCP (Model Context Protocol) server that lets Claude Desktop, Claude Code, or
 Requires Python 3.11+.
 
 ```bash
+pip install gtmos-mcp
+```
+
+Or from source:
+
+```bash
 pip install git+https://github.com/Kai8karma/gtmos-mcp.git
 ```
 
