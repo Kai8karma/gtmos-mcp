@@ -107,6 +107,89 @@ def _tool_funnel_leak(args: dict) -> str:
     )
 
 
+def _tool_cortex_scorecard(args: dict) -> str:
+    """Score GTM ops health across 5 dimensions from a CRM export or live HubSpot portal. Read-only."""
+    from gtmos.cortex import engine, fetch, report
+
+    contacts_file = args.get("contacts_file")
+    if contacts_file:
+        contacts_raw = fetch.load_contacts_raw(contacts_file)
+    elif args.get("portal"):
+        contacts_raw = fetch.fetch_portal_contacts(os.environ.get("GTMOS_HUBSPOT_TOKEN"))
+    else:
+        raise ValueError("pass contacts_file, or portal=true with GTMOS_HUBSPOT_TOKEN set")
+
+    if not contacts_raw:
+        raise ValueError("no contacts found in source")
+
+    deals_file = args.get("deals_file")
+    deals: list = []
+    if deals_file:
+        deals = fetch.load_deals(deals_file)
+    elif args.get("portal"):
+        try:
+            deals = fetch.fetch_portal_deals(os.environ.get("GTMOS_HUBSPOT_TOKEN"))
+        except RuntimeError:
+            deals = []  # deals are optional for the scorecard; a missing scope just drops the lifecycle pipeline check
+
+    sla_hours = float(args.get("sla_hours") or engine.DEFAULT_SLA_HOURS)
+    result = engine.run_engine(contacts_raw, deals, sla_hours=sla_hours)
+    summary = report.render(result, args.get("out_dir") or "./cortex-out")
+
+    lines = [
+        f"Assessed {result.total_contacts} contacts and {result.total_deals} deals.",
+        f"Composite GTM ops health: {summary['composite_score']:.1f} ({summary['grade']}).",
+        summary["verdict"],
+        "Dimensions (worst first):",
+    ]
+    scored = sorted((d for d in result.dimensions.values() if d.score is not None), key=lambda d: d.score)
+    for dim in scored:
+        lines.append(f"  - {dim.name}: {dim.score:.1f} ({dim.status})")
+    if result.excluded_dimensions:
+        lines.append(f"Insufficient data (excluded from composite): {', '.join(result.excluded_dimensions)}.")
+    if result.fixes:
+        top = result.fixes[0]
+        lines.append(f"{len(result.fixes)} ranked fix(es); worst is {top.severity} on {top.dimension}.")
+    lines.append(f"Full report written to: {summary['report_path']}")
+    return "\n".join(lines)
+
+
+def _tool_ops_signals(args: dict) -> str:
+    """Terse severity-tagged signals on the GTM stack itself: SLA breaches, property drift, lifecycle breaks, sync-failure proxies. Read-only."""
+    from gtmos.cortex import engine, fetch
+
+    contacts_file = args.get("contacts_file")
+    if contacts_file:
+        contacts_raw = fetch.load_contacts_raw(contacts_file)
+    elif args.get("portal"):
+        contacts_raw = fetch.fetch_portal_contacts(os.environ.get("GTMOS_HUBSPOT_TOKEN"))
+    else:
+        raise ValueError("pass contacts_file, or portal=true with GTMOS_HUBSPOT_TOKEN set")
+
+    if not contacts_raw:
+        raise ValueError("no contacts found in source")
+
+    deals_file = args.get("deals_file")
+    deals: list = []
+    if deals_file:
+        deals = fetch.load_deals(deals_file)
+    elif args.get("portal"):
+        try:
+            deals = fetch.fetch_portal_deals(os.environ.get("GTMOS_HUBSPOT_TOKEN"))
+        except RuntimeError:
+            deals = []
+
+    sla_hours = float(args.get("sla_hours") or engine.DEFAULT_SLA_HOURS)
+    signals = engine.compute_signals(contacts_raw, deals, sla_hours=sla_hours)
+
+    lines = [f"{signals.total_contacts} contacts, {signals.total_deals} deals scanned. SLA threshold: {sla_hours:.0f}h."]
+    for sig in signals.signals:
+        lines.append(f"[{sig.severity}] {sig.name}: {sig.count} - {sig.detail}")
+        for offender in sig.top_offenders:
+            lines.append(f"    - {offender}")
+    return "\n".join(lines)
+
+
 TOOLS: list[dict[str, Any]] = [
     {
         "name": "audit_crm",
@@ -141,11 +224,52 @@ TOOLS: list[dict[str, Any]] = [
             },
         },
     },
+    {
+        "name": "cortex_scorecard",
+        "description": (
+            "Score GTM ops health across five dimensions (data quality, lifecycle, routing, "
+            "automation, reporting) from a CRM export or live HubSpot portal. Returns a weighted "
+            "composite score, grade, verdict, and severity-ranked fixes sequenced into week 1 / "
+            "weeks 2-4 / quarter. Read-only: never writes to the CRM."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "contacts_file": {"type": "string", "description": "Path to a contacts JSON export."},
+                "deals_file": {
+                    "type": "string",
+                    "description": "Path to a deals JSON export (optional; enables the pipeline stage-divergence check).",
+                },
+                "portal": {"type": "boolean", "description": "Fetch live from HubSpot using GTMOS_HUBSPOT_TOKEN."},
+                "sla_hours": {"type": "number", "description": "Routing SLA in hours, createdate to first touch (default 24)."},
+                "out_dir": {"type": "string", "description": "Where to write the report (default ./cortex-out)."},
+            },
+        },
+    },
+    {
+        "name": "ops_signals",
+        "description": (
+            "Terse severity-tagged signal list on the GTM stack itself, not the buyer: routing SLA "
+            "breaches, property drift, lifecycle integrity breaks, and sync-failure proxies, with "
+            "counts and top offenders. Read-only: never writes to the CRM."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "contacts_file": {"type": "string", "description": "Path to a contacts JSON export."},
+                "deals_file": {"type": "string", "description": "Path to a deals JSON export (optional)."},
+                "portal": {"type": "boolean", "description": "Fetch live from HubSpot using GTMOS_HUBSPOT_TOKEN."},
+                "sla_hours": {"type": "number", "description": "Routing SLA in hours, createdate to first touch (default 24)."},
+            },
+        },
+    },
 ]
 
 HANDLERS: dict[str, Callable[[dict], str]] = {
     "audit_crm": _tool_audit_crm,
     "funnel_leak": _tool_funnel_leak,
+    "cortex_scorecard": _tool_cortex_scorecard,
+    "ops_signals": _tool_ops_signals,
 }
 
 

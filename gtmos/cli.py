@@ -23,6 +23,12 @@ def _cmd_calibrate(args: argparse.Namespace) -> int:
     return run(args)
 
 
+def _cmd_cortex(args: argparse.Namespace) -> int:
+    from gtmos.cortex.cli_entry import run
+
+    return run(args)
+
+
 def _cmd_mcp(args: argparse.Namespace) -> int:
     from gtmos.mcp.cli_entry import run
 
@@ -62,6 +68,15 @@ def build_parser() -> argparse.ArgumentParser:
     cal_p.add_argument("--out", default="./calibrate-out", help="output directory (default ./calibrate-out)")
     cal_p.add_argument("--dry-run", **dry_run_kwargs)
     cal_p.set_defaults(func=_cmd_calibrate)
+
+    cortex_p = subparsers.add_parser("cortex", help="score GTM ops health across 5 dimensions (Marketing Cortex)")
+    cortex_p.add_argument("--input", metavar="FILE", help="offline contacts JSON (fallback to --portal)")
+    cortex_p.add_argument("--deals", metavar="FILE", help="offline deals JSON (optional, enables the pipeline check)")
+    cortex_p.add_argument("--portal", action="store_true", help="fetch live from HubSpot API")
+    cortex_p.add_argument("--sla-hours", dest="sla_hours", type=float, help="routing SLA in hours (default 24)")
+    cortex_p.add_argument("--out", default="./cortex-out", help="output directory (default ./cortex-out)")
+    cortex_p.add_argument("--dry-run", **dry_run_kwargs)
+    cortex_p.set_defaults(func=_cmd_cortex)
 
     mcp_p = subparsers.add_parser("mcp", help="run the MCP server on stdio (read-only audit tools)")
     mcp_p.add_argument("--config", action="store_true", help="print a ready-to-paste MCP host config block")
@@ -105,9 +120,9 @@ def main(argv: list[str] | None = None) -> int:
         return 130
     except SystemExit:
         raise
-    except Exception as exc:  # noqa: BLE001 — the whole point is catching everything
+    except Exception as exc:  # noqa: BLE001 - the whole point is catching everything
         log_path = _log_crash(args.command)
-        print(f"{args.command}: unexpected error: {exc} — full trace: {log_path}")
+        print(f"{args.command}: unexpected error: {exc} - full trace: {log_path}")
         return 1
 
 

@@ -1,6 +1,6 @@
 [project]
 name = "gtmos-mcp"
-version = "0.3.1"
+version = "0.4.0"
 description = "Read-only CRM audit for Claude over MCP: score data integrity, find duplicate clusters and stalled revenue, in your environment through your own token."
 readme = "README.md"
 license = { file = "LICENSE" }

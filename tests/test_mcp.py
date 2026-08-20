@@ -28,6 +28,18 @@ CONTACTS = [
     {"id": "3", "properties": {"email": "", "firstname": "", "company": ""}},
 ]
 
+CORTEX_CONTACTS = [
+    {
+        "email": "a@acme.io", "owner": "rep1", "lifecyclestage": "opportunity",
+        "createdate": "2026-08-01T00:00:00Z", "notes_last_contacted": "2026-08-02T00:00:00Z",
+        "hs_lastmodifieddate": "2026-08-10T00:00:00Z", "hs_analytics_source": "ORGANIC_SEARCH",
+    },
+    {
+        "email": "b@acme.io", "owner": None, "lifecyclestage": None,
+        "createdate": "2026-08-01T00:00:00Z", "hs_analytics_source": None,
+    },
+]
+
 
 # ---------------------------------------------------------------------------
 # protocol
@@ -97,6 +109,43 @@ def test_audit_crm_scores_a_file(tmp_path):
     assert (tmp_path / "out").is_dir()
 
 
+def test_cortex_scorecard_scores_a_file(tmp_path):
+    src = tmp_path / "contacts.json"
+    src.write_text(json.dumps(CORTEX_CONTACTS), encoding="utf-8")
+    out = call_tool(
+        "cortex_scorecard",
+        {"contacts_file": str(src), "out_dir": str(tmp_path / "out")},
+    )
+    assert not out.get("isError"), out["content"][0]["text"]
+    text = out["content"][0]["text"]
+    assert "Composite GTM ops health" in text
+    assert "Dimensions (worst first)" in text
+    assert (tmp_path / "out" / "ops-scorecard.md").exists()
+    assert (tmp_path / "out" / "cortex-scores.json").exists()
+
+
+def test_cortex_scorecard_missing_source_is_reported_as_content_not_crash():
+    out = call_tool("cortex_scorecard", {})
+    assert out["isError"] is True
+    assert "contacts_file" in out["content"][0]["text"]
+
+
+def test_ops_signals_scans_a_file(tmp_path):
+    src = tmp_path / "contacts.json"
+    src.write_text(json.dumps(CORTEX_CONTACTS), encoding="utf-8")
+    out = call_tool("ops_signals", {"contacts_file": str(src), "sla_hours": 1})
+    assert not out.get("isError"), out["content"][0]["text"]
+    text = out["content"][0]["text"]
+    assert "contacts" in text and "deals scanned" in text
+    assert "routing_sla_breach" in text
+
+
+def test_ops_signals_missing_source_is_reported_as_content_not_crash():
+    out = call_tool("ops_signals", {})
+    assert out["isError"] is True
+    assert "contacts_file" in out["content"][0]["text"]
+
+
 def test_tools_call_routes_through_handle_message(tmp_path):
     src = tmp_path / "contacts.json"
     src.write_text(json.dumps(CONTACTS), encoding="utf-8")
@@ -151,6 +200,7 @@ def test_cli_mcp_dry_run_lists_tools(capsys):
     assert args.func(args) == 0
     out = capsys.readouterr().out
     assert "audit_crm" in out and "funnel_leak" in out
+    assert "cortex_scorecard" in out and "ops_signals" in out
 
 
 def test_cli_mcp_config_emits_valid_json(capsys):

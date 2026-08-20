@@ -8,5 +8,6 @@ build/
 audit-out/
 funnel-out/
 calibrate-out/
+cortex-out/
 .pytest_cache/
 .DS_Store
