@@ -156,3 +156,11 @@ python -m pytest tests/
 ---
 
 mcp-name: io.github.Kai8karma/gtmos-mcp
+
+---
+
+## Try it on your own CRM, free
+
+- **[CRM Data Quality Grader](https://kai8karma.github.io/agentkai/tools/crm-data-quality-grader/)** - paste an export, get a scored report in your browser. Nothing is uploaded.
+- **Live CRM audit through your own Claude**: `pip install gtmos-mcp`, then ask *"audit my CRM and tell me what's leaking."* Read-only, runs in your environment.
+- **First 50 accounts audited free, done for you**: [kai8karma.github.io/agentkai](https://kai8karma.github.io/agentkai/)
