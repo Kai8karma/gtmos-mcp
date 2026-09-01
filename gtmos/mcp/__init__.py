@@ -192,6 +192,63 @@ def _tool_ops_signals(args: dict) -> str:
     return "\n".join(lines)
 
 
+def _cortex_sources(args: dict) -> tuple[list, list, float]:
+    """(contacts_raw, deals, sla_hours) for the graph and proposals tools.
+    Same resolution rules as cortex_scorecard: file wins over portal, deals
+    are optional, an explicit sla_hours of 0 is honored."""
+    from gtmos.cortex import engine, fetch
+
+    contacts_file = args.get("contacts_file")
+    if contacts_file:
+        contacts_raw = fetch.load_contacts_raw(contacts_file)
+    elif args.get("portal"):
+        contacts_raw = fetch.fetch_portal_contacts(os.environ.get("GTMOS_HUBSPOT_TOKEN"))
+    else:
+        raise ValueError("pass contacts_file, or portal=true with GTMOS_HUBSPOT_TOKEN set")
+    if not contacts_raw:
+        raise ValueError("no contacts found in source")
+
+    deals_file = args.get("deals_file")
+    deals: list = []
+    if deals_file:
+        deals = fetch.load_deals(deals_file)
+    elif args.get("portal"):
+        try:
+            deals = fetch.fetch_portal_deals(os.environ.get("GTMOS_HUBSPOT_TOKEN"))
+        except RuntimeError:
+            deals = []
+
+    raw_sla_hours = args.get("sla_hours")
+    sla_hours = float(raw_sla_hours) if raw_sla_hours is not None else engine.DEFAULT_SLA_HOURS
+    return contacts_raw, deals, sla_hours
+
+
+def _tool_cortex_graph(args: dict) -> str:
+    """Build the context graph (contacts, accounts, owners, sources, deals) and roll it up per account. Read-only."""
+    from gtmos.cortex import graph as cortex_graph
+
+    contacts_raw, deals, sla_hours = _cortex_sources(args)
+    graph = cortex_graph.build_graph(contacts_raw, deals, sla_hours=sla_hours)
+    top = int(args.get("top") or 10)
+    summary = cortex_graph.render(graph, args.get("out_dir") or "./cortex-out", top=top)
+    text = cortex_graph.summarize(graph, account=args.get("account"), top=top)
+    return f"{text}\nGraph written to: {summary['graph_path']} (report: {summary['report_path']})"
+
+
+def _tool_cortex_proposals(args: dict) -> str:
+    """Run the governed agents over the context graph and return a policy-gated proposal queue. Read-only: proposes, never applies."""
+    from gtmos.cortex import govern
+    from gtmos.funnel import engine as funnel_engine
+
+    contacts_raw, deals, sla_hours = _cortex_sources(args)
+    policy = govern.load_policy(args["policy_file"]) if args.get("policy_file") else govern.Policy()
+    raw_stall = args.get("stall_days")
+    stall_days = int(raw_stall) if raw_stall is not None else funnel_engine.DEFAULT_STALL_DAYS
+    result = govern.run_engine(contacts_raw, deals, policy=policy, sla_hours=sla_hours, stall_days=stall_days)
+    summary = govern.render(result, args.get("out_dir") or "./cortex-out")
+    return f"{govern.summarize(result)}\nFull queue written to: {summary['report_path']}"
+
+
 TOOLS: list[dict[str, Any]] = [
     {
         "name": "audit_crm",
@@ -265,6 +322,50 @@ TOOLS: list[dict[str, Any]] = [
             },
         },
     },
+    {
+        "name": "cortex_graph",
+        "description": (
+            "Build the Cortex context graph from a CRM export or live HubSpot portal: contacts, "
+            "accounts (by email domain), owners, sources, and deals, with explicit-only edges and a "
+            "per-account rollup (owners, unrouted contacts, source conflicts, SLA breaches, open "
+            "pipeline, last touch, flags). Pass account to drill into one account. Read-only: never "
+            "writes to the CRM."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "contacts_file": {"type": "string", "description": "Path to a contacts JSON export."},
+                "deals_file": {"type": "string", "description": "Path to a deals JSON export (optional; deals link to accounts only via an explicit association property)."},
+                "portal": {"type": "boolean", "description": "Fetch live from HubSpot using GTMOS_HUBSPOT_TOKEN."},
+                "sla_hours": {"type": "number", "description": "Routing SLA in hours, createdate to first touch (default 24)."},
+                "account": {"type": "string", "description": "Email domain or company name to drill into (optional)."},
+                "top": {"type": "integer", "description": "How many accounts to list, open pipeline first (default 10)."},
+                "out_dir": {"type": "string", "description": "Where to write context-graph.json/.md (default ./cortex-out)."},
+            },
+        },
+    },
+    {
+        "name": "cortex_proposals",
+        "description": (
+            "Run the Cortex governed agents (router, deduper, lifecycle steward, attribution steward, "
+            "pipeline steward, schema steward) over the context graph and return a policy-gated "
+            "proposal queue: each proposal carries targets, a before/after diff, evidence, confidence, "
+            "and blast radius; proposals that fail the policy (action allow-list, blast-radius cap, "
+            "confidence floor) are returned as BLOCKED with the reason. Read-only: proposes, never applies."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "contacts_file": {"type": "string", "description": "Path to a contacts JSON export."},
+                "deals_file": {"type": "string", "description": "Path to a deals JSON export (optional; enables the pipeline steward and deal-backed lifecycle evidence)."},
+                "portal": {"type": "boolean", "description": "Fetch live from HubSpot using GTMOS_HUBSPOT_TOKEN."},
+                "sla_hours": {"type": "number", "description": "Routing SLA in hours, createdate to first touch (default 24)."},
+                "stall_days": {"type": "integer", "description": "Days untouched before a deal counts as stalled (default 21)."},
+                "policy_file": {"type": "string", "description": "Path to a policy JSON override (name, allowed_actions, max_blast_records, max_blast_share, min_confidence). requires_human cannot be disabled."},
+                "out_dir": {"type": "string", "description": "Where to write proposals.md/.json (default ./cortex-out)."},
+            },
+        },
+    },
 ]
 
 HANDLERS: dict[str, Callable[[dict], str]] = {
@@ -272,6 +373,8 @@ HANDLERS: dict[str, Callable[[dict], str]] = {
     "funnel_leak": _tool_funnel_leak,
     "cortex_scorecard": _tool_cortex_scorecard,
     "ops_signals": _tool_ops_signals,
+    "cortex_graph": _tool_cortex_graph,
+    "cortex_proposals": _tool_cortex_proposals,
 }
 
 

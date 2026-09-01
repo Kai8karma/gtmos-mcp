@@ -69,12 +69,21 @@ def build_parser() -> argparse.ArgumentParser:
     cal_p.add_argument("--dry-run", **dry_run_kwargs)
     cal_p.set_defaults(func=_cmd_calibrate)
 
-    cortex_p = subparsers.add_parser("cortex", help="score GTM ops health across 5 dimensions (Marketing Cortex)")
+    cortex_p = subparsers.add_parser(
+        "cortex", help="Marketing Cortex: ops health scorecard (default), --graph, or --proposals"
+    )
     cortex_p.add_argument("--input", metavar="FILE", help="offline contacts JSON (fallback to --portal)")
     cortex_p.add_argument("--deals", metavar="FILE", help="offline deals JSON (optional, enables the pipeline check)")
     cortex_p.add_argument("--portal", action="store_true", help="fetch live from HubSpot API")
     cortex_p.add_argument("--sla-hours", dest="sla_hours", type=float, help="routing SLA in hours (default 24)")
     cortex_p.add_argument("--out", default="./cortex-out", help="output directory (default ./cortex-out)")
+    cortex_mode = cortex_p.add_mutually_exclusive_group()
+    cortex_mode.add_argument("--graph", action="store_true", help="build the context graph and per-account rollup instead of the scorecard")
+    cortex_mode.add_argument("--proposals", action="store_true", help="run the governed agents and write the policy-gated proposal queue")
+    cortex_p.add_argument("--account", metavar="DOMAIN", help="with --graph: drill into one account (email domain or company name)")
+    cortex_p.add_argument("--top", type=int, default=10, help="with --graph: accounts to list (default 10)")
+    cortex_p.add_argument("--policy", metavar="FILE", help="with --proposals: policy JSON override")
+    cortex_p.add_argument("--stall-days", dest="stall_days", type=int, help="with --proposals: deal stall threshold in days (default 21)")
     cortex_p.add_argument("--dry-run", **dry_run_kwargs)
     cortex_p.set_defaults(func=_cmd_cortex)
 

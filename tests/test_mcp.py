@@ -222,8 +222,102 @@ def test_cli_mcp_dry_run_lists_tools(capsys):
     args = parser.parse_args(["mcp", "--dry-run"])
     assert args.func(args) == 0
     out = capsys.readouterr().out
+    assert "would serve 6 tools" in out
     assert "audit_crm" in out and "funnel_leak" in out
     assert "cortex_scorecard" in out and "ops_signals" in out
+    assert "cortex_graph" in out and "cortex_proposals" in out
+
+
+# ---------------------------------------------------------------------------
+# cortex graph + proposals tools
+# ---------------------------------------------------------------------------
+
+
+def test_cortex_graph_builds_from_files(tmp_path):
+    src = tmp_path / "contacts.json"
+    src.write_text(json.dumps(CORTEX_CONTACTS), encoding="utf-8")
+    out = call_tool("cortex_graph", {"contacts_file": str(src), "out_dir": str(tmp_path / "out")})
+    assert not out.get("isError"), out["content"][0]["text"]
+    text = out["content"][0]["text"]
+    assert "Context graph: 2 contacts, 1 accounts" in text
+    assert "acme.io" in text and "unowned:1" in text
+    assert (tmp_path / "out" / "context-graph.json").exists()
+    assert (tmp_path / "out" / "context-graph.md").exists()
+
+
+def test_cortex_graph_account_drilldown(tmp_path):
+    src = tmp_path / "contacts.json"
+    src.write_text(json.dumps(CORTEX_CONTACTS), encoding="utf-8")
+    out = call_tool("cortex_graph", {"contacts_file": str(src), "out_dir": str(tmp_path / "out"), "account": "acme.io"})
+    text = out["content"][0]["text"]
+    assert "Account acme.io [acme.io]" in text and "1 unowned" in text
+
+
+def test_cortex_graph_missing_source_is_reported_as_content_not_crash():
+    out = call_tool("cortex_graph", {})
+    assert out["isError"] is True
+    assert "contacts_file" in out["content"][0]["text"]
+
+
+def test_cortex_proposals_returns_policy_gated_queue(tmp_path):
+    src = tmp_path / "contacts.json"
+    src.write_text(json.dumps(CORTEX_CONTACTS), encoding="utf-8")
+    out = call_tool("cortex_proposals", {"contacts_file": str(src), "out_dir": str(tmp_path / "out")})
+    assert not out.get("isError"), out["content"][0]["text"]
+    text = out["content"][0]["text"]
+    assert "PROPOSED" in text and "BLOCKED" in text
+    assert "Nothing is applied by this tool." in text
+    assert "assign_owner: owner = rep1" in text  # b@acme.io routed to the account's only owner
+    payload = json.loads((tmp_path / "out" / "proposals.json").read_text(encoding="utf-8"))
+    assert payload["policy"]["requires_human"] is True
+    assert (tmp_path / "out" / "proposals.md").exists()
+
+
+def test_cortex_proposals_honors_policy_file(tmp_path):
+    src = tmp_path / "contacts.json"
+    src.write_text(json.dumps(CORTEX_CONTACTS), encoding="utf-8")
+    policy = tmp_path / "policy.json"
+    policy.write_text(json.dumps({"name": "no-routing", "allowed_actions": ["merge_duplicates"]}), encoding="utf-8")
+    out = call_tool(
+        "cortex_proposals",
+        {"contacts_file": str(src), "out_dir": str(tmp_path / "out"), "policy_file": str(policy)},
+    )
+    text = out["content"][0]["text"]
+    assert "policy no-routing" in text
+    assert "not in policy no-routing's allow-list" in text
+
+
+def test_cortex_proposals_bad_policy_is_reported_as_content_not_crash(tmp_path):
+    src = tmp_path / "contacts.json"
+    src.write_text(json.dumps(CORTEX_CONTACTS), encoding="utf-8")
+    policy = tmp_path / "policy.json"
+    policy.write_text(json.dumps({"requires_human": False}), encoding="utf-8")
+    out = call_tool("cortex_proposals", {"contacts_file": str(src), "policy_file": str(policy)})
+    assert out["isError"] is True
+    assert "cannot be disabled" in out["content"][0]["text"]
+
+
+def test_cli_cortex_graph_and_proposals_modes(tmp_path, capsys):
+    src = tmp_path / "contacts.json"
+    src.write_text(json.dumps(CORTEX_CONTACTS), encoding="utf-8")
+    parser = build_parser()
+
+    args = parser.parse_args(["cortex", "--graph", "--input", str(src), "--out", str(tmp_path / "g"), "--top", "3"])
+    assert args.func(args) == 0
+    assert "Context graph:" in capsys.readouterr().out
+    assert (tmp_path / "g" / "context-graph.json").exists()
+
+    args = parser.parse_args(["cortex", "--proposals", "--input", str(src), "--out", str(tmp_path / "p")])
+    assert args.func(args) == 0
+    assert "PROPOSED" in capsys.readouterr().out
+    assert (tmp_path / "p" / "proposals.json").exists()
+
+
+def test_cli_cortex_graph_and_proposals_are_mutually_exclusive():
+    import pytest
+
+    with pytest.raises(SystemExit):
+        build_parser().parse_args(["cortex", "--graph", "--proposals", "--input", "x.json"])
 
 
 def test_cli_mcp_config_emits_valid_json(capsys):
