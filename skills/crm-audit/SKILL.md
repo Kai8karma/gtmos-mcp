@@ -29,7 +29,7 @@ If neither is available, ask the user for one. Do not guess file paths.
 |---|---|---|
 | "How healthy is our CRM / RevOps?" (start here when vague) | `cortex_scorecard` | contacts, deals (optional), `sla_hours` |
 | "How clean is our contact data?" "Find duplicates" | `audit_crm` | contacts, `acv` for the dollar estimate |
-| "Where is pipeline stuck?" "Where are we leaking revenue?" | `funnel_leak` | deals, `stall_days` (default 30), `acv` |
+| "Where is pipeline stuck?" "Where are we leaking revenue?" | `funnel_leak` | deals, `stall_days` (default 21), `acv` |
 | "What is breaking in our stack right now?" | `ops_signals` | contacts, deals (optional), `sla_hours` |
 | "Tell me about account X" "Who owns which accounts?" | `cortex_graph` | contacts, deals, `account` (domain or company), `top` |
 | "What should we fix first?" "Draft the cleanup" | `cortex_proposals` | contacts, deals, optional `policy_file` |
@@ -49,7 +49,7 @@ Stop after step 1 if the user only wanted a score.
 - Lead with the verdict: score, grade, and the one or two weakest areas.
 - Then the top three fixes in the tool's own order (week 1, weeks 2 to 4, quarter).
 - Quote counts and dollar figures exactly as returned. Say "estimated" for any dollar figure that used a default or imputed `acv`.
-- Point to the written report file (`./audit-out` or `./cortex-out`) for the full detail rather than pasting it.
+- Point to the written report file (`./audit-out`, `./funnel-out` or `./cortex-out`; `ops_signals` writes no file) for the full detail rather than pasting it.
 - Keep record-level personal data (emails, phones) out of the summary unless the user asks for it.
 
 ## Proposals are proposals
