@@ -279,7 +279,7 @@ TOOLS: list[dict[str, Any]] = [
                 "deals_file": {"type": "string", "description": "Path to a deals JSON export."},
                 "portal": {"type": "boolean", "description": "Fetch live deals using GTMOS_HUBSPOT_TOKEN."},
                 "acv": {"type": "number", "description": "Average contract value, for imputing missing amounts."},
-                "stall_days": {"type": "integer", "description": "Days untouched before a deal counts as stalled (default 30)."},
+                "stall_days": {"type": "integer", "description": "Days untouched before a deal counts as stalled (default 21)."},
             },
         },
     },

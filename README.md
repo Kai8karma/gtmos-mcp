@@ -86,6 +86,15 @@ claude mcp add gtmos --env GTMOS_HUBSPOT_TOKEN=<your-hubspot-private-app-token> 
 
 Restart the host, then ask: *"Audit my CRM and show me the weakest dimension."*
 
+### Add the skill (recommended)
+
+The MCP server gives the agent the tools. The skill in [`skills/crm-audit/SKILL.md`](skills/crm-audit/SKILL.md) tells it which tool answers which question, the order to run them in, and how to report results without inventing numbers. For Claude Code, copy it into your skills folder:
+
+```bash
+mkdir -p ~/.claude/skills/crm-audit
+curl -o ~/.claude/skills/crm-audit/SKILL.md https://raw.githubusercontent.com/Kai8karma/gtmos-mcp/master/skills/crm-audit/SKILL.md
+```
+
 ### Getting a HubSpot token
 
 Create a [private app](https://developers.hubspot.com/docs/guides/apps/private-apps/overview) in your HubSpot portal with read-only scopes: `crm.objects.contacts.read` for `audit_crm`, `crm.objects.deals.read` for `funnel_leak`. `cortex_scorecard`, `ops_signals`, `cortex_graph`, and `cortex_proposals` reuse both fetch paths, so they need whichever of those two scopes matches the inputs you give them. The token stays in your host config on your machine; this package never stores or forwards it.
