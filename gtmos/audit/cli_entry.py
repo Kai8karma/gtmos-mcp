@@ -6,6 +6,7 @@ import argparse
 import os
 
 from gtmos.audit import engine, fetch, report
+from gtmos.timeutil import parse_as_of
 
 
 def run(args: argparse.Namespace) -> int:
@@ -29,7 +30,13 @@ def run(args: argparse.Namespace) -> int:
         print("audit: no contacts found in source")
         return 1
 
-    result = engine.run_engine(contacts)
+    try:
+        as_of = parse_as_of(getattr(args, "as_of", None))
+    except ValueError as exc:
+        print(f"audit: {exc}")
+        return 1
+
+    result = engine.run_engine(contacts, as_of)
     acv = args.acv if args.acv is not None else 0.0
     summary = report.render(result, acv, args.out)
 

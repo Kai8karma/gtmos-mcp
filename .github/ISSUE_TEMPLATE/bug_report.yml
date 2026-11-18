@@ -1,0 +1,55 @@
+name: Bug report
+description: A tool returned a wrong result, an error, or the server misbehaved
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: gtmos-mcp version
+      description: Output of `pip show gtmos-mcp | grep Version`
+    validations:
+      required: true
+  - type: input
+    id: host
+    attributes:
+      label: MCP host and version
+      placeholder: Claude Desktop 1.x, Claude Code 2.x, other
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: Data source
+      options:
+        - JSON export (file mode)
+        - Live HubSpot portal (portal=true)
+    validations:
+      required: true
+  - type: textarea
+    id: call
+    attributes:
+      label: Tool call
+      description: The tool name and arguments. Redact paths if you need to.
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: The tool result or error text. Remove real names and emails first.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Smallest input that reproduces it
+      description: Two or three made-up records are ideal. Never paste real CRM data.
+      render: json

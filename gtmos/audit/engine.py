@@ -89,7 +89,7 @@ class RecordScore:
 
 @dataclass
 class DupeCluster:
-    kind: str  # "exact_email" | "fuzzy_name_company"
+    kind: str  # "exact_email" | "fuzzy_name_company" | "possible_name_company"
     key: str
     indices: list[int] = field(default_factory=list)
     emails: list[str] = field(default_factory=list)
@@ -107,6 +107,9 @@ class AuditResult:
     duped_record_share: float = 0.0
     dead_share: float = 0.0      # records at/below UNREACHABLE_CAP
     at_risk_share: float = 0.0   # records below 70
+    # Same surname and company, but first names differ or are missing: listed
+    # for a human to review, never scored and never proposed for merge.
+    possible_dupe_clusters: list[DupeCluster] = field(default_factory=list)
 
 
 def score_completeness(contact: dict) -> float:
@@ -224,12 +227,54 @@ def score_record(contact: dict, index: int, now: datetime | None = None) -> Reco
     )
 
 
+_COMPANY_SUFFIXES = (
+    "inc", "incorporated", "llc", "ltd", "limited", "corp", "corporation",
+    "co", "company", "plc", "gmbh", "pvt",
+)
+
+
 def _normalize_company(company: str) -> str:
-    name = company.strip().lower()
-    for suffix in (" inc", " inc.", " llc", " llc.", " ltd", " ltd.", " corp", " corp.", " co", " co."):
-        if name.endswith(suffix):
-            name = name[: -len(suffix)]
-    return name.strip()
+    """Lower-case, drop punctuation and trailing legal suffixes, so that
+    "Acme, Inc." and "Acme Inc" compare equal. Suffixes are stripped
+    repeatedly ("Acme Co., Ltd." -> "acme"); a one-word name is kept as is."""
+    words = re.sub(r"[.,]", " ", company.lower()).split()
+    while len(words) > 1 and words[-1] in _COMPANY_SUFFIXES:
+        words.pop()
+    return " ".join(words)
+
+
+def _first_name_key(firstname: str | None) -> str:
+    """Normalized first name for duplicate matching; "" when unusable."""
+    if is_junk(firstname):
+        return ""
+    return re.sub(r"[^\w]", "", firstname.strip().lower())
+
+
+def _name_company_clusters(indices: list[int], contacts: list[dict]) -> list[tuple[str, list[int]]]:
+    """Split one (lastname, company) bucket into clusters of records that
+    plausibly name the same person.
+
+    A shared surname at one employer is not evidence of a duplicate on its
+    own - two different Patels at Acme are two people. First names must
+    agree, or one must be an initial that matches exactly one full first name
+    in the bucket. A record with no first name is never clustered here: there
+    is nothing to confirm it against (exact_email still catches it).
+    """
+    full: dict[str, list[int]] = {}
+    initials: dict[str, list[int]] = {}
+    for i in indices:
+        first = _first_name_key(contacts[i].get("firstname"))
+        if not first:
+            continue
+        (initials if len(first) == 1 else full).setdefault(first, []).append(i)
+    for letter, members in initials.items():
+        candidates = [name for name in full if name.startswith(letter)]
+        if len(candidates) == 1:
+            full[candidates[0]].extend(members)
+        elif not candidates and len(members) > 1:
+            full[letter] = list(members)
+        # two or more candidates: the initial is ambiguous, leave it unclustered
+    return [(name, sorted(members)) for name, members in full.items() if len(members) > 1]
 
 
 def find_dupes(contacts: list[dict]) -> list[DupeCluster]:
@@ -262,17 +307,47 @@ def find_dupes(contacts: list[dict]) -> list[DupeCluster]:
         key = (lastname.strip().lower(), _normalize_company(company))
         by_name_company.setdefault(key, []).append(i)
     for key, indices in by_name_company.items():
-        if len(indices) > 1:
+        if len(indices) < 2:
+            continue
+        for first, members in _name_company_clusters(indices, contacts):
             clusters.append(
                 DupeCluster(
                     kind="fuzzy_name_company",
-                    key=f"{key[0]} / {key[1]}",
-                    indices=indices,
-                    emails=[contacts[i].get("email") for i in indices],
+                    key=f"{first} {key[0]} / {key[1]}",
+                    indices=members,
+                    emails=[contacts[i].get("email") for i in members],
                 )
             )
 
     return clusters
+
+
+def find_possible_dupes(contacts: list[dict]) -> list[DupeCluster]:
+    """Same surname at the same company where first names do not confirm a
+    match. Nothing is hidden: every bucket find_dupes used to flag wholesale
+    still surfaces here, labelled as a review item instead of a duplicate."""
+    confirmed = [set(c.indices) for c in find_dupes(contacts) if c.kind == "fuzzy_name_company"]
+
+    buckets: dict[tuple[str, str], list[int]] = {}
+    for i, c in enumerate(contacts):
+        lastname, company = c.get("lastname"), c.get("company")
+        if is_junk(lastname) or is_junk(company):
+            continue
+        buckets.setdefault((lastname.strip().lower(), _normalize_company(company)), []).append(i)
+
+    possible: list[DupeCluster] = []
+    for key, indices in buckets.items():
+        if len(indices) < 2 or any(set(indices) <= members for members in confirmed):
+            continue
+        possible.append(
+            DupeCluster(
+                kind="possible_name_company",
+                key=f"{key[0]} / {key[1]}",
+                indices=indices,
+                emails=[contacts[i].get("email") for i in indices],
+            )
+        )
+    return possible
 
 
 def run_engine(contacts: list[dict], now: datetime | None = None) -> AuditResult:
@@ -306,4 +381,5 @@ def run_engine(contacts: list[dict], now: datetime | None = None) -> AuditResult
         duped_record_share=duped_share,
         dead_share=sum(1 for r in records if r.overall <= UNREACHABLE_CAP) / total,
         at_risk_share=sum(1 for r in records if r.overall < 70.0) / total,
+        possible_dupe_clusters=find_possible_dupes(contacts),
     )

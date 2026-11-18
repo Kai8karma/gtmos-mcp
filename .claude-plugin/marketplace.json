@@ -1,0 +1,15 @@
+{
+  "name": "gtmos",
+  "description": "GTM OS tools for Claude Code",
+  "owner": {
+    "name": "Kai (Kai8karma)",
+    "url": "https://github.com/Kai8karma"
+  },
+  "plugins": [
+    {
+      "name": "gtmos-mcp",
+      "source": "./",
+      "description": "Deterministic CRM audit for HubSpot: integrity score, duplicates, stalled revenue, ops health and a policy-gated proposal queue."
+    }
+  ]
+}

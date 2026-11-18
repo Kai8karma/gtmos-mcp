@@ -9,6 +9,7 @@ import argparse
 import os
 
 from gtmos.cortex import engine, fetch, report
+from gtmos.timeutil import parse_as_of
 
 
 def run(args: argparse.Namespace) -> int:
@@ -46,11 +47,16 @@ def run(args: argparse.Namespace) -> int:
             deals = []  # deals are optional; a missing scope just drops the lifecycle pipeline check
 
     sla_hours = args.sla_hours if args.sla_hours is not None else engine.DEFAULT_SLA_HOURS
+    try:
+        as_of = parse_as_of(getattr(args, "as_of", None))
+    except ValueError as exc:
+        print(f"cortex: {exc}")
+        return 1
 
     if getattr(args, "graph", False):
         from gtmos.cortex import graph as cortex_graph
 
-        built = cortex_graph.build_graph(contacts_raw, deals, sla_hours=sla_hours)
+        built = cortex_graph.build_graph(contacts_raw, deals, sla_hours=sla_hours, now=as_of)
         summary = cortex_graph.render(built, args.out, top=args.top)
         print(cortex_graph.summarize(built, account=args.account, top=args.top))
         print(f"cortex: graph written to {summary['graph_path']}")
@@ -66,13 +72,13 @@ def run(args: argparse.Namespace) -> int:
             print(f"cortex: {exc}")
             return 1
         stall_days = args.stall_days if args.stall_days is not None else funnel_engine.DEFAULT_STALL_DAYS
-        governed = govern.run_engine(contacts_raw, deals, policy=policy, sla_hours=sla_hours, stall_days=stall_days)
+        governed = govern.run_engine(contacts_raw, deals, policy=policy, sla_hours=sla_hours, stall_days=stall_days, now=as_of)
         summary = govern.render(governed, args.out)
         print(govern.summarize(governed))
         print(f"cortex: proposals written to {summary['report_path']}")
         return 0
 
-    result = engine.run_engine(contacts_raw, deals, sla_hours=sla_hours)
+    result = engine.run_engine(contacts_raw, deals, sla_hours=sla_hours, now=as_of)
     summary = report.render(result, args.out)
 
     print(

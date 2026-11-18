@@ -1,0 +1,74 @@
+{
+  "composite_score": 89.23882352941177,
+  "grade": "A",
+  "verdict": "GTM ops stack is in solid shape (grade A); data_quality is the softest spot at 77.5.",
+  "composite_weights": {
+    "data_quality": 0.35294117647058826,
+    "lifecycle": 0.23529411764705885,
+    "routing": 0.23529411764705885,
+    "automation": 0.17647058823529413
+  },
+  "excluded_dimensions": [
+    "reporting"
+  ],
+  "total_contacts": 25,
+  "total_deals": 15,
+  "sla_hours": 24.0,
+  "dimensions": {
+    "data_quality": {
+      "name": "data_quality",
+      "score": 77.51,
+      "status": "HEALTHY",
+      "evidence": [
+        "portal integrity score 77.5 (delegated to gtmos.audit.engine)",
+        "2 duplicate cluster(s)",
+        "8% unreachable, 16% at risk (record score < 70)",
+        "weakest sub-dimension: freshness (55.0)"
+      ]
+    },
+    "lifecycle": {
+      "name": "lifecycle",
+      "score": 100.0,
+      "status": "HEALTHY",
+      "evidence": [
+        "0/25 contacts (0%) are missing lifecyclestage",
+        "deals not supplied, or deals carry no pipeline property - stage-divergence check skipped"
+      ]
+    },
+    "routing": {
+      "name": "routing",
+      "score": 88.0,
+      "status": "HEALTHY",
+      "evidence": [
+        "a first-touch signal (notes_last_contacted / hs_sales_email_last_replied / hs_analytics_first_timestamp) not present anywhere in this export - SLA check skipped",
+        "3/25 contacts (12%) have no owner - never routed"
+      ]
+    },
+    "automation": {
+      "name": "automation",
+      "score": 100.0,
+      "status": "HEALTHY",
+      "evidence": [
+        "0/10 exported properties are present-but-never-populated across the sample (e.g. none)",
+        "hs_lastmodifieddate not present anywhere in this export - staleness check skipped"
+      ]
+    },
+    "reporting": {
+      "name": "reporting",
+      "score": null,
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [
+        "no analytics-source / utm_source-like property present anywhere in this export - attribution checks skipped"
+      ]
+    }
+  },
+  "fixes": [
+    {
+      "severity": "WATCH",
+      "dimension": "reporting",
+      "finding": "no analytics-source / utm_source-like property present anywhere in this export - attribution checks skipped",
+      "fix": "Start capturing hs_analytics_source or a utm_source-equivalent at capture time so attribution can be measured.",
+      "sequence": "quarter"
+    }
+  ]
+}

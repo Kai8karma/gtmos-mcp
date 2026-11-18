@@ -17,7 +17,7 @@ import json
 import shutil
 import sys
 
-from gtmos.mcp import PROTOCOL_VERSION, SERVER_NAME, TOOLS, serve
+from gtmos.mcp import SERVER_NAME, SUPPORTED_VERSIONS, TOOLS, serve
 
 
 def _config_block() -> str:
@@ -44,7 +44,7 @@ def run(args: argparse.Namespace) -> int:
         return 0
 
     if getattr(args, "dry_run", False):
-        print(f"[dry-run] gtmos mcp would serve {len(TOOLS)} tools on stdio (protocol {PROTOCOL_VERSION})")
+        print(f"[dry-run] gtmos mcp would serve {len(TOOLS)} tools on stdio (protocol {', '.join(SUPPORTED_VERSIONS)})")
         for tool in TOOLS:
             print(f"  - {tool['name']}: {tool['description'].split('.')[0]}.")
         return 0
