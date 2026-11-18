@@ -1,0 +1,1605 @@
+{
+  "generated": "2026-11-18T16:35:52+00:00",
+  "total_contacts": 25,
+  "total_deals": 15,
+  "contacts_without_account": 0,
+  "unlinked_deals": 15,
+  "sla_hours": 24.0,
+  "accounts": [
+    {
+      "key": "brightpathlogistics.com",
+      "name": "Brightpath Logistics",
+      "contacts": 3,
+      "owners": {
+        "Ananya Iyer": 3
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "opportunity": 1,
+        "salesqualifiedlead": 1,
+        "lead": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 3,
+      "last_touch": "2026-06-02T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:0",
+        "contact:1",
+        "contact:2"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:3"
+      ]
+    },
+    {
+      "key": "meridiansteelworks.com",
+      "name": "Meridian Steelworks",
+      "contacts": 2,
+      "owners": {
+        "Vikram Sethi": 2
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "marketingqualifiedlead": 1,
+        "opportunity": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 2,
+      "last_touch": "2026-06-11T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:3",
+        "contact:4"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:2"
+      ]
+    },
+    {
+      "key": "apexpetrochem.com",
+      "name": "Apex Petrochem",
+      "contacts": 1,
+      "owners": {
+        "Vikram Sethi": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "opportunity": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-07-01T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:19"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "bluecrestenergy.com",
+      "name": "Bluecrest Energy",
+      "contacts": 1,
+      "owners": {},
+      "unowned_contacts": 1,
+      "lifecycle_stages": {
+        "customer": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-04-14T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:17"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "unowned:1",
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "crestlinepackaging.com",
+      "name": "Crestline Packaging",
+      "contacts": 1,
+      "owners": {
+        "Ravi Suresh": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "evangelist": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-05-09T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:21"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "duneshieldcement.com",
+      "name": "Duneshield Cement",
+      "contacts": 1,
+      "owners": {
+        "Vikram Sethi": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "lead": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2024-12-01T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:13"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "ferrotechalloys.com",
+      "name": "Ferrotech Alloys",
+      "contacts": 1,
+      "owners": {
+        "Ravi Suresh": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "customer": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2024-03-12T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:9"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "granitewaveexports.com",
+      "name": "Granitewave Exports",
+      "contacts": 1,
+      "owners": {
+        "Vikram Sethi": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "opportunity": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2023-11-02T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:10"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "haldiaportservices.com",
+      "name": "Haldia Port Services",
+      "contacts": 1,
+      "owners": {
+        "Ananya Iyer": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "marketingqualifiedlead": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2024-06-30T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:11"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "name:coastal freight",
+      "name": "Coastal Freight Co",
+      "contacts": 1,
+      "owners": {
+        "Ravi Suresh": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "lead": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-03-01T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:8"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "name:placeholder industries",
+      "name": "Placeholder Industries",
+      "contacts": 1,
+      "owners": {
+        "Ananya Iyer": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "subscriber": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2025-12-20T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:6"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "name:sundry forms",
+      "name": "Sundry Forms LLC",
+      "contacts": 1,
+      "owners": {
+        "Ravi Suresh": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "lead": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-02-14T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:7"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "northstarfabrication.com",
+      "name": "Northstar Fabrication",
+      "contacts": 1,
+      "owners": {
+        "Ananya Iyer": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "evangelist": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-06-05T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:14"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "orionvalveworks.com",
+      "name": "Orion Valve Works",
+      "contacts": 1,
+      "owners": {},
+      "unowned_contacts": 1,
+      "lifecycle_stages": {
+        "opportunity": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-06-25T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:15"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "unowned:1",
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "pinnacleautoparts.com",
+      "name": "Pinnacle Auto Parts",
+      "contacts": 1,
+      "owners": {
+        "Ravi Suresh": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "customer": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-06-28T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:18"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "quantumgears.com",
+      "name": "Quantum Gears",
+      "contacts": 1,
+      "owners": {
+        "Ananya Iyer": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "marketingqualifiedlead": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-06-15T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:20"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "sterlingcastparts.com",
+      "name": "Sterling Cast Parts",
+      "contacts": 1,
+      "owners": {},
+      "unowned_contacts": 1,
+      "lifecycle_stages": {
+        "salesqualifiedlead": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-05-30T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:16"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "unowned:1",
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "test.com",
+      "name": "Unknown Corp",
+      "contacts": 1,
+      "owners": {
+        "Vikram Sethi": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "subscriber": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-01-05T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:5"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "titanindustrialgases.com",
+      "name": "Titan Industrial Gases",
+      "contacts": 1,
+      "owners": {
+        "Vikram Sethi": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "customer": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-06-30T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:22"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "vantagepolymers.com",
+      "name": "Vantage Polymers",
+      "contacts": 1,
+      "owners": {
+        "Ravi Suresh": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "salesqualifiedlead": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2023-03-10T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:12"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "vermillionwires.com",
+      "name": "Vermillion Wires",
+      "contacts": 1,
+      "owners": {
+        "Ananya Iyer": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "lead": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-05-22T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:23"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    },
+    {
+      "key": "westernrangeforgings.com",
+      "name": "Western Range Forgings",
+      "contacts": 1,
+      "owners": {
+        "Ravi Suresh": 1
+      },
+      "unowned_contacts": 0,
+      "lifecycle_stages": {
+        "salesqualifiedlead": 1
+      },
+      "missing_lifecycle": 0,
+      "sources": {},
+      "source_conflict": false,
+      "sla_breaches": 1,
+      "last_touch": "2026-06-19T00:00:00+00:00",
+      "deals": 0,
+      "open_deals": 0,
+      "open_amount": 0,
+      "won_deals": 0,
+      "contact_ids": [
+        "contact:24"
+      ],
+      "deal_ids": [],
+      "flags": [
+        "sla-breach:1"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "contact:0",
+      "kind": "contact",
+      "label": "sales@brightpathlogistics.com",
+      "attrs": {
+        "owner": "Ananya Iyer",
+        "source": null,
+        "lifecyclestage": "opportunity",
+        "last_touch": "2026-06-02T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "owner:Ananya Iyer",
+      "kind": "owner",
+      "label": "Ananya Iyer",
+      "attrs": {}
+    },
+    {
+      "id": "contact:1",
+      "kind": "contact",
+      "label": "sales@brightpathlogistics.com",
+      "attrs": {
+        "owner": "Ananya Iyer",
+        "source": null,
+        "lifecyclestage": "salesqualifiedlead",
+        "last_touch": "2026-05-18T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:2",
+      "kind": "contact",
+      "label": "sales@brightpathlogistics.com",
+      "attrs": {
+        "owner": "Ananya Iyer",
+        "source": null,
+        "lifecyclestage": "lead",
+        "last_touch": "2026-04-30T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:3",
+      "kind": "contact",
+      "label": "priya.kapoor@meridiansteelworks.com",
+      "attrs": {
+        "owner": "Vikram Sethi",
+        "source": null,
+        "lifecyclestage": "marketingqualifiedlead",
+        "last_touch": "2026-05-25T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "owner:Vikram Sethi",
+      "kind": "owner",
+      "label": "Vikram Sethi",
+      "attrs": {}
+    },
+    {
+      "id": "contact:4",
+      "kind": "contact",
+      "label": "p.kapoor@meridiansteelworks.com",
+      "attrs": {
+        "owner": "Vikram Sethi",
+        "source": null,
+        "lifecyclestage": "opportunity",
+        "last_touch": "2026-06-11T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:5",
+      "kind": "contact",
+      "label": "test@test.com",
+      "attrs": {
+        "owner": "Vikram Sethi",
+        "source": null,
+        "lifecyclestage": "subscriber",
+        "last_touch": "2026-01-05T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:6",
+      "kind": "contact",
+      "label": "asdf@asdf",
+      "attrs": {
+        "owner": "Ananya Iyer",
+        "source": null,
+        "lifecyclestage": "subscriber",
+        "last_touch": "2025-12-20T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:7",
+      "kind": "contact",
+      "label": "(no email)",
+      "attrs": {
+        "owner": "Ravi Suresh",
+        "source": null,
+        "lifecyclestage": "lead",
+        "last_touch": "2026-02-14T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "owner:Ravi Suresh",
+      "kind": "owner",
+      "label": "Ravi Suresh",
+      "attrs": {}
+    },
+    {
+      "id": "contact:8",
+      "kind": "contact",
+      "label": "notanemailnodomain",
+      "attrs": {
+        "owner": "Ravi Suresh",
+        "source": null,
+        "lifecyclestage": "lead",
+        "last_touch": "2026-03-01T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:9",
+      "kind": "contact",
+      "label": "arjun.desai@ferrotechalloys.com",
+      "attrs": {
+        "owner": "Ravi Suresh",
+        "source": null,
+        "lifecyclestage": "customer",
+        "last_touch": "2024-03-12T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:10",
+      "kind": "contact",
+      "label": "nisha.pillai@granitewaveexports.com",
+      "attrs": {
+        "owner": "Vikram Sethi",
+        "source": null,
+        "lifecyclestage": "opportunity",
+        "last_touch": "2023-11-02T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:11",
+      "kind": "contact",
+      "label": "manoj.iyengar@haldiaportservices.com",
+      "attrs": {
+        "owner": "Ananya Iyer",
+        "source": null,
+        "lifecyclestage": "marketingqualifiedlead",
+        "last_touch": "2024-06-30T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:12",
+      "kind": "contact",
+      "label": "reema.chowdhury@vantagepolymers.com",
+      "attrs": {
+        "owner": "Ravi Suresh",
+        "source": null,
+        "lifecyclestage": "salesqualifiedlead",
+        "last_touch": "2023-03-10T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:13",
+      "kind": "contact",
+      "label": "sanjay.oberoi@duneshieldcement.com",
+      "attrs": {
+        "owner": "Vikram Sethi",
+        "source": null,
+        "lifecyclestage": "lead",
+        "last_touch": "2024-12-01T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:14",
+      "kind": "contact",
+      "label": "kiran.vora@northstarfabrication.com",
+      "attrs": {
+        "owner": "Ananya Iyer",
+        "source": null,
+        "lifecyclestage": "evangelist",
+        "last_touch": "2026-06-05T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:15",
+      "kind": "contact",
+      "label": "tanvi.saxena@orionvalveworks.com",
+      "attrs": {
+        "owner": null,
+        "source": null,
+        "lifecyclestage": "opportunity",
+        "last_touch": "2026-06-25T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:16",
+      "kind": "contact",
+      "label": "harish.menon@sterlingcastparts.com",
+      "attrs": {
+        "owner": null,
+        "source": null,
+        "lifecyclestage": "salesqualifiedlead",
+        "last_touch": "2026-05-30T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:17",
+      "kind": "contact",
+      "label": "zoya.ansari@bluecrestenergy.com",
+      "attrs": {
+        "owner": null,
+        "source": null,
+        "lifecyclestage": "customer",
+        "last_touch": "2026-04-14T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:18",
+      "kind": "contact",
+      "label": "vivaan.chauhan@pinnacleautoparts.com",
+      "attrs": {
+        "owner": "Ravi Suresh",
+        "source": null,
+        "lifecyclestage": "customer",
+        "last_touch": "2026-06-28T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:19",
+      "kind": "contact",
+      "label": "meera.krishnan@apexpetrochem.com",
+      "attrs": {
+        "owner": "Vikram Sethi",
+        "source": null,
+        "lifecyclestage": "opportunity",
+        "last_touch": "2026-07-01T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:20",
+      "kind": "contact",
+      "label": "aditya.ranganathan@quantumgears.com",
+      "attrs": {
+        "owner": "Ananya Iyer",
+        "source": null,
+        "lifecyclestage": "marketingqualifiedlead",
+        "last_touch": "2026-06-15T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:21",
+      "kind": "contact",
+      "label": "leela.subramaniam@crestlinepackaging.com",
+      "attrs": {
+        "owner": "Ravi Suresh",
+        "source": null,
+        "lifecyclestage": "evangelist",
+        "last_touch": "2026-05-09T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:22",
+      "kind": "contact",
+      "label": "yusuf.qureshi@titanindustrialgases.com",
+      "attrs": {
+        "owner": "Vikram Sethi",
+        "source": null,
+        "lifecyclestage": "customer",
+        "last_touch": "2026-06-30T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:23",
+      "kind": "contact",
+      "label": "ishita.bose@vermillionwires.com",
+      "attrs": {
+        "owner": "Ananya Iyer",
+        "source": null,
+        "lifecyclestage": "lead",
+        "last_touch": "2026-05-22T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "contact:24",
+      "kind": "contact",
+      "label": "gautam.holla@westernrangeforgings.com",
+      "attrs": {
+        "owner": "Ravi Suresh",
+        "source": null,
+        "lifecyclestage": "salesqualifiedlead",
+        "last_touch": "2026-06-19T00:00:00+00:00",
+        "sla_breach": true
+      }
+    },
+    {
+      "id": "company:brightpathlogistics.com",
+      "kind": "company",
+      "label": "Brightpath Logistics",
+      "attrs": {
+        "key": "brightpathlogistics.com"
+      }
+    },
+    {
+      "id": "company:meridiansteelworks.com",
+      "kind": "company",
+      "label": "Meridian Steelworks",
+      "attrs": {
+        "key": "meridiansteelworks.com"
+      }
+    },
+    {
+      "id": "company:test.com",
+      "kind": "company",
+      "label": "Unknown Corp",
+      "attrs": {
+        "key": "test.com"
+      }
+    },
+    {
+      "id": "company:name:placeholder industries",
+      "kind": "company",
+      "label": "Placeholder Industries",
+      "attrs": {
+        "key": "name:placeholder industries"
+      }
+    },
+    {
+      "id": "company:name:sundry forms",
+      "kind": "company",
+      "label": "Sundry Forms LLC",
+      "attrs": {
+        "key": "name:sundry forms"
+      }
+    },
+    {
+      "id": "company:name:coastal freight",
+      "kind": "company",
+      "label": "Coastal Freight Co",
+      "attrs": {
+        "key": "name:coastal freight"
+      }
+    },
+    {
+      "id": "company:ferrotechalloys.com",
+      "kind": "company",
+      "label": "Ferrotech Alloys",
+      "attrs": {
+        "key": "ferrotechalloys.com"
+      }
+    },
+    {
+      "id": "company:granitewaveexports.com",
+      "kind": "company",
+      "label": "Granitewave Exports",
+      "attrs": {
+        "key": "granitewaveexports.com"
+      }
+    },
+    {
+      "id": "company:haldiaportservices.com",
+      "kind": "company",
+      "label": "Haldia Port Services",
+      "attrs": {
+        "key": "haldiaportservices.com"
+      }
+    },
+    {
+      "id": "company:vantagepolymers.com",
+      "kind": "company",
+      "label": "Vantage Polymers",
+      "attrs": {
+        "key": "vantagepolymers.com"
+      }
+    },
+    {
+      "id": "company:duneshieldcement.com",
+      "kind": "company",
+      "label": "Duneshield Cement",
+      "attrs": {
+        "key": "duneshieldcement.com"
+      }
+    },
+    {
+      "id": "company:northstarfabrication.com",
+      "kind": "company",
+      "label": "Northstar Fabrication",
+      "attrs": {
+        "key": "northstarfabrication.com"
+      }
+    },
+    {
+      "id": "company:orionvalveworks.com",
+      "kind": "company",
+      "label": "Orion Valve Works",
+      "attrs": {
+        "key": "orionvalveworks.com"
+      }
+    },
+    {
+      "id": "company:sterlingcastparts.com",
+      "kind": "company",
+      "label": "Sterling Cast Parts",
+      "attrs": {
+        "key": "sterlingcastparts.com"
+      }
+    },
+    {
+      "id": "company:bluecrestenergy.com",
+      "kind": "company",
+      "label": "Bluecrest Energy",
+      "attrs": {
+        "key": "bluecrestenergy.com"
+      }
+    },
+    {
+      "id": "company:pinnacleautoparts.com",
+      "kind": "company",
+      "label": "Pinnacle Auto Parts",
+      "attrs": {
+        "key": "pinnacleautoparts.com"
+      }
+    },
+    {
+      "id": "company:apexpetrochem.com",
+      "kind": "company",
+      "label": "Apex Petrochem",
+      "attrs": {
+        "key": "apexpetrochem.com"
+      }
+    },
+    {
+      "id": "company:quantumgears.com",
+      "kind": "company",
+      "label": "Quantum Gears",
+      "attrs": {
+        "key": "quantumgears.com"
+      }
+    },
+    {
+      "id": "company:crestlinepackaging.com",
+      "kind": "company",
+      "label": "Crestline Packaging",
+      "attrs": {
+        "key": "crestlinepackaging.com"
+      }
+    },
+    {
+      "id": "company:titanindustrialgases.com",
+      "kind": "company",
+      "label": "Titan Industrial Gases",
+      "attrs": {
+        "key": "titanindustrialgases.com"
+      }
+    },
+    {
+      "id": "company:vermillionwires.com",
+      "kind": "company",
+      "label": "Vermillion Wires",
+      "attrs": {
+        "key": "vermillionwires.com"
+      }
+    },
+    {
+      "id": "company:westernrangeforgings.com",
+      "kind": "company",
+      "label": "Western Range Forgings",
+      "attrs": {
+        "key": "westernrangeforgings.com"
+      }
+    },
+    {
+      "id": "deal:1",
+      "kind": "deal",
+      "label": "Deal A Won",
+      "attrs": {
+        "stage": "closedwon",
+        "status": "won",
+        "amount": 10000.0
+      }
+    },
+    {
+      "id": "owner:owner1",
+      "kind": "owner",
+      "label": "owner1",
+      "attrs": {}
+    },
+    {
+      "id": "deal:2",
+      "kind": "deal",
+      "label": "Deal B Won",
+      "attrs": {
+        "stage": "closedwon",
+        "status": "won",
+        "amount": 20000.0
+      }
+    },
+    {
+      "id": "owner:owner2",
+      "kind": "owner",
+      "label": "owner2",
+      "attrs": {}
+    },
+    {
+      "id": "deal:3",
+      "kind": "deal",
+      "label": "Deal C Lost",
+      "attrs": {
+        "stage": "closedlost",
+        "status": "lost",
+        "amount": 5000.0
+      }
+    },
+    {
+      "id": "deal:4",
+      "kind": "deal",
+      "label": "Deal D Lost",
+      "attrs": {
+        "stage": "closedlost",
+        "status": "lost",
+        "amount": 15000.0
+      }
+    },
+    {
+      "id": "deal:5",
+      "kind": "deal",
+      "label": "Deal E Stalled Appointment",
+      "attrs": {
+        "stage": "appointmentscheduled",
+        "status": "open",
+        "amount": 8000.0
+      }
+    },
+    {
+      "id": "deal:6",
+      "kind": "deal",
+      "label": "Deal F Stalled Qualified",
+      "attrs": {
+        "stage": "qualifiedtobuy",
+        "status": "open",
+        "amount": 12000.0
+      }
+    },
+    {
+      "id": "deal:7",
+      "kind": "deal",
+      "label": "Deal G Fresh Presentation",
+      "attrs": {
+        "stage": "presentationscheduled",
+        "status": "open",
+        "amount": 9000.0
+      }
+    },
+    {
+      "id": "deal:8",
+      "kind": "deal",
+      "label": "Deal H Unvalued Fresh",
+      "attrs": {
+        "stage": "decisionmakerboughtin",
+        "status": "open",
+        "amount": 0.0
+      }
+    },
+    {
+      "id": "deal:9",
+      "kind": "deal",
+      "label": "Deal I Unvalued Stalled",
+      "attrs": {
+        "stage": "contractsent",
+        "status": "open",
+        "amount": 0.0
+      }
+    },
+    {
+      "id": "deal:10",
+      "kind": "deal",
+      "label": "Deal J Won Small",
+      "attrs": {
+        "stage": "closedwon",
+        "status": "won",
+        "amount": 3000.0
+      }
+    },
+    {
+      "id": "owner:owner3",
+      "kind": "owner",
+      "label": "owner3",
+      "attrs": {}
+    },
+    {
+      "id": "deal:11",
+      "kind": "deal",
+      "label": "Deal K Malformed Modified Date",
+      "attrs": {
+        "stage": "qualifiedtobuy",
+        "status": "open",
+        "amount": 4000.0
+      }
+    },
+    {
+      "id": "deal:12",
+      "kind": "deal",
+      "label": "Deal L Malformed Created Won",
+      "attrs": {
+        "stage": "closedwon",
+        "status": "won",
+        "amount": 6000.0
+      }
+    },
+    {
+      "id": "deal:13",
+      "kind": "deal",
+      "label": "Deal M Epoch Ms Stalled",
+      "attrs": {
+        "stage": "presentationscheduled",
+        "status": "open",
+        "amount": 7000.0
+      }
+    },
+    {
+      "id": "deal:14",
+      "kind": "deal",
+      "label": "Deal N Unknown Stage",
+      "attrs": {
+        "stage": "somethingcustom",
+        "status": "open",
+        "amount": 2000.0
+      }
+    },
+    {
+      "id": "deal:15",
+      "kind": "deal",
+      "label": "Deal O Lost Unvalued",
+      "attrs": {
+        "stage": "closedlost",
+        "status": "lost",
+        "amount": 0.0
+      }
+    }
+  ],
+  "edges": [
+    {
+      "src": "contact:0",
+      "dst": "company:brightpathlogistics.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ananya Iyer",
+      "dst": "contact:0",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:1",
+      "dst": "company:brightpathlogistics.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ananya Iyer",
+      "dst": "contact:1",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:2",
+      "dst": "company:brightpathlogistics.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ananya Iyer",
+      "dst": "contact:2",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:3",
+      "dst": "company:meridiansteelworks.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Vikram Sethi",
+      "dst": "contact:3",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:4",
+      "dst": "company:meridiansteelworks.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Vikram Sethi",
+      "dst": "contact:4",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:5",
+      "dst": "company:test.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Vikram Sethi",
+      "dst": "contact:5",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:6",
+      "dst": "company:name:placeholder industries",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ananya Iyer",
+      "dst": "contact:6",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:7",
+      "dst": "company:name:sundry forms",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ravi Suresh",
+      "dst": "contact:7",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:8",
+      "dst": "company:name:coastal freight",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ravi Suresh",
+      "dst": "contact:8",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:9",
+      "dst": "company:ferrotechalloys.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ravi Suresh",
+      "dst": "contact:9",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:10",
+      "dst": "company:granitewaveexports.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Vikram Sethi",
+      "dst": "contact:10",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:11",
+      "dst": "company:haldiaportservices.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ananya Iyer",
+      "dst": "contact:11",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:12",
+      "dst": "company:vantagepolymers.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ravi Suresh",
+      "dst": "contact:12",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:13",
+      "dst": "company:duneshieldcement.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Vikram Sethi",
+      "dst": "contact:13",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:14",
+      "dst": "company:northstarfabrication.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ananya Iyer",
+      "dst": "contact:14",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:15",
+      "dst": "company:orionvalveworks.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "contact:16",
+      "dst": "company:sterlingcastparts.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "contact:17",
+      "dst": "company:bluecrestenergy.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "contact:18",
+      "dst": "company:pinnacleautoparts.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ravi Suresh",
+      "dst": "contact:18",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:19",
+      "dst": "company:apexpetrochem.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Vikram Sethi",
+      "dst": "contact:19",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:20",
+      "dst": "company:quantumgears.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ananya Iyer",
+      "dst": "contact:20",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:21",
+      "dst": "company:crestlinepackaging.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ravi Suresh",
+      "dst": "contact:21",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:22",
+      "dst": "company:titanindustrialgases.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Vikram Sethi",
+      "dst": "contact:22",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:23",
+      "dst": "company:vermillionwires.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ananya Iyer",
+      "dst": "contact:23",
+      "rel": "owns"
+    },
+    {
+      "src": "contact:24",
+      "dst": "company:westernrangeforgings.com",
+      "rel": "belongs_to"
+    },
+    {
+      "src": "owner:Ravi Suresh",
+      "dst": "contact:24",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner1",
+      "dst": "deal:1",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner2",
+      "dst": "deal:2",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner1",
+      "dst": "deal:3",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner2",
+      "dst": "deal:4",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner1",
+      "dst": "deal:5",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner2",
+      "dst": "deal:6",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner1",
+      "dst": "deal:7",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner2",
+      "dst": "deal:8",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner1",
+      "dst": "deal:9",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner3",
+      "dst": "deal:10",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner2",
+      "dst": "deal:11",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner1",
+      "dst": "deal:12",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner3",
+      "dst": "deal:13",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner1",
+      "dst": "deal:14",
+      "rel": "owns"
+    },
+    {
+      "src": "owner:owner3",
+      "dst": "deal:15",
+      "rel": "owns"
+    }
+  ]
+}

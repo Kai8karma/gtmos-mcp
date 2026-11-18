@@ -1,0 +1,37 @@
+{
+  "name": "gtmos-mcp",
+  "displayName": "GTM OS CRM Audit",
+  "version": "0.6.0",
+  "description": "Deterministic CRM audit for HubSpot: integrity score, duplicate clusters, stalled revenue, GTM ops health and a policy-gated proposal queue. Runs locally with your own token and never writes to the CRM.",
+  "author": {
+    "name": "Kai (Kai8karma)",
+    "url": "https://github.com/Kai8karma"
+  },
+  "homepage": "https://github.com/Kai8karma/gtmos-mcp",
+  "repository": "https://github.com/Kai8karma/gtmos-mcp",
+  "license": "MIT",
+  "keywords": ["mcp", "crm", "hubspot", "revops", "gtm", "audit", "data-quality"],
+  "userConfig": {
+    "hubspot_token": {
+      "type": "string",
+      "title": "HubSpot private-app token",
+      "description": "Read-only scopes are enough (crm.objects.contacts.read, crm.objects.deals.read). Leave empty to audit JSON exports only.",
+      "sensitive": true
+    },
+    "allowed_dir": {
+      "type": "directory",
+      "title": "Allowed directory",
+      "description": "The only folder the tools may read exports from and write reports to. Leave empty for no restriction."
+    }
+  },
+  "mcpServers": {
+    "gtmos": {
+      "command": "gtmos",
+      "args": ["mcp"],
+      "env": {
+        "GTMOS_HUBSPOT_TOKEN": "${user_config.hubspot_token}",
+        "GTMOS_ALLOWED_DIR": "${user_config.allowed_dir}"
+      }
+    }
+  }
+}

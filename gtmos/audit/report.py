@@ -109,6 +109,21 @@ def render(result: AuditResult, acv: float, out_dir: str) -> dict:
             lines.append(f"| {cluster.kind} | {cluster.key} | {emails} |")
     lines.append("")
 
+    if result.possible_dupe_clusters:
+        lines.append("## Possible duplicates to review")
+        lines.append("")
+        lines.append(
+            "_Same surname and company, but first names differ or are missing. These may be "
+            "different people, so they are not counted in the score and never proposed for merge._"
+        )
+        lines.append("")
+        lines.append("| Key | Records |")
+        lines.append("|---|---|")
+        for cluster in result.possible_dupe_clusters:
+            emails = ", ".join(e or "(missing)" for e in cluster.emails)
+            lines.append(f"| {cluster.key} | {emails} |")
+        lines.append("")
+
     lines.append("## $-leak estimate")
     lines.append("")
     lines.append(
@@ -137,6 +152,7 @@ def render(result: AuditResult, acv: float, out_dir: str) -> dict:
         "dimension_averages": result.dimension_averages,
         "leak_estimate": leak,
         "dupe_clusters": [asdict(c) for c in result.dupe_clusters],
+        "possible_dupe_clusters": [asdict(c) for c in result.possible_dupe_clusters],
         "records": [asdict(r) for r in result.records],
     }
     scores_path = out_path / "scores.json"

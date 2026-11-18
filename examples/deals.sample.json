@@ -1,0 +1,152 @@
+[
+  {
+    "id": "1",
+    "dealname": "Deal A Won",
+    "amount": "10000",
+    "dealstage": "closedwon",
+    "createdate": "2026-01-01T00:00:00Z",
+    "hs_lastmodifieddate": "2026-02-01T00:00:00Z",
+    "closedate": "2026-02-01T00:00:00Z",
+    "hubspot_owner_id": "owner1"
+  },
+  {
+    "id": "2",
+    "dealname": "Deal B Won",
+    "amount": "20000",
+    "dealstage": "closedwon",
+    "createdate": "2026-01-10T00:00:00Z",
+    "hs_lastmodifieddate": "2026-02-20T00:00:00Z",
+    "closedate": "2026-02-20T00:00:00Z",
+    "hubspot_owner_id": "owner2"
+  },
+  {
+    "id": "3",
+    "dealname": "Deal C Lost",
+    "amount": "5000",
+    "dealstage": "closedlost",
+    "createdate": "2026-01-01T00:00:00Z",
+    "hs_lastmodifieddate": "2026-01-15T00:00:00Z",
+    "closedate": "2026-01-15T00:00:00Z",
+    "hubspot_owner_id": "owner1"
+  },
+  {
+    "id": "4",
+    "dealname": "Deal D Lost",
+    "amount": "15000",
+    "dealstage": "closedlost",
+    "createdate": "2026-01-05T00:00:00Z",
+    "hs_lastmodifieddate": "2026-01-20T00:00:00Z",
+    "closedate": "2026-01-20T00:00:00Z",
+    "hubspot_owner_id": "owner2"
+  },
+  {
+    "id": "5",
+    "dealname": "Deal E Stalled Appointment",
+    "amount": "8000",
+    "dealstage": "appointmentscheduled",
+    "createdate": "2026-04-20T00:00:00Z",
+    "hs_lastmodifieddate": "2026-05-01T00:00:00Z",
+    "closedate": null,
+    "hubspot_owner_id": "owner1"
+  },
+  {
+    "id": "6",
+    "dealname": "Deal F Stalled Qualified",
+    "amount": "12000",
+    "dealstage": "qualifiedtobuy",
+    "createdate": "2026-05-15T00:00:00Z",
+    "hs_lastmodifieddate": "2026-06-01T00:00:00Z",
+    "closedate": null,
+    "hubspot_owner_id": "owner2"
+  },
+  {
+    "id": "7",
+    "dealname": "Deal G Fresh Presentation",
+    "amount": "9000",
+    "dealstage": "presentationscheduled",
+    "createdate": "2026-07-01T00:00:00Z",
+    "hs_lastmodifieddate": "2026-07-10T00:00:00Z",
+    "closedate": null,
+    "hubspot_owner_id": "owner1"
+  },
+  {
+    "id": "8",
+    "dealname": "Deal H Unvalued Fresh",
+    "amount": null,
+    "dealstage": "decisionmakerboughtin",
+    "createdate": "2026-06-20T00:00:00Z",
+    "hs_lastmodifieddate": "2026-07-05T00:00:00Z",
+    "closedate": null,
+    "hubspot_owner_id": "owner2"
+  },
+  {
+    "id": "9",
+    "dealname": "Deal I Unvalued Stalled",
+    "amount": "0",
+    "dealstage": "contractsent",
+    "createdate": "2026-03-01T00:00:00Z",
+    "hs_lastmodifieddate": "2026-04-01T00:00:00Z",
+    "closedate": null,
+    "hubspot_owner_id": "owner1"
+  },
+  {
+    "id": "10",
+    "dealname": "Deal J Won Small",
+    "amount": "3000",
+    "dealstage": "closedwon",
+    "createdate": "2026-03-01T00:00:00Z",
+    "hs_lastmodifieddate": "2026-03-10T00:00:00Z",
+    "closedate": "2026-03-10T00:00:00Z",
+    "hubspot_owner_id": "owner3"
+  },
+  {
+    "id": "11",
+    "dealname": "Deal K Malformed Modified Date",
+    "amount": "4000",
+    "dealstage": "qualifiedtobuy",
+    "createdate": "2026-05-01T00:00:00Z",
+    "hs_lastmodifieddate": "not-a-date",
+    "closedate": null,
+    "hubspot_owner_id": "owner2"
+  },
+  {
+    "id": "12",
+    "dealname": "Deal L Malformed Created Won",
+    "amount": "6000",
+    "dealstage": "closedwon",
+    "createdate": "bad-date",
+    "hs_lastmodifieddate": "2026-04-01T00:00:00Z",
+    "closedate": "2026-04-01T00:00:00Z",
+    "hubspot_owner_id": "owner1"
+  },
+  {
+    "id": "13",
+    "dealname": "Deal M Epoch Ms Stalled",
+    "amount": "7000",
+    "dealstage": "presentationscheduled",
+    "createdate": "2026-04-25T00:00:00Z",
+    "hs_lastmodifieddate": "1777593600000",
+    "closedate": null,
+    "hubspot_owner_id": "owner3"
+  },
+  {
+    "id": "14",
+    "dealname": "Deal N Unknown Stage",
+    "amount": "2000",
+    "dealstage": "somethingcustom",
+    "createdate": "2026-01-01T00:00:00Z",
+    "hs_lastmodifieddate": "2026-01-01T00:00:00Z",
+    "closedate": null,
+    "hubspot_owner_id": "owner1"
+  },
+  {
+    "id": "15",
+    "dealname": "Deal O Lost Unvalued",
+    "amount": null,
+    "dealstage": "closedlost",
+    "createdate": "2026-05-01T00:00:00Z",
+    "hs_lastmodifieddate": "2026-06-01T00:00:00Z",
+    "closedate": "2026-06-01T00:00:00Z",
+    "hubspot_owner_id": "owner3"
+  }
+]

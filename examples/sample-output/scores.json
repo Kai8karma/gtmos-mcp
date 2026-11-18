@@ -1,0 +1,324 @@
+{
+  "portal_score": 77.51,
+  "grade": "B",
+  "total_records": 25,
+  "dimension_averages": {
+    "completeness": 94.6,
+    "validity": 91.86666666666666,
+    "freshness": 55.0,
+    "ownership": 88.0,
+    "consistency": 93.6
+  },
+  "leak_estimate": {
+    "unreachable_pct": 0.28,
+    "unreachable_count": 7,
+    "estimated_leak_usd": 1260.0000000000002,
+    "acv": 9000.0
+  },
+  "dupe_clusters": [
+    {
+      "kind": "exact_email",
+      "key": "sales@brightpathlogistics.com",
+      "indices": [
+        0,
+        1,
+        2
+      ],
+      "emails": [
+        "sales@brightpathlogistics.com",
+        "sales@brightpathlogistics.com",
+        "sales@brightpathlogistics.com"
+      ]
+    },
+    {
+      "kind": "fuzzy_name_company",
+      "key": "priya kapoor / meridian steelworks",
+      "indices": [
+        3,
+        4
+      ],
+      "emails": [
+        "priya.kapoor@meridiansteelworks.com",
+        "p.kapoor@meridiansteelworks.com"
+      ]
+    }
+  ],
+  "possible_dupe_clusters": [],
+  "records": [
+    {
+      "index": 0,
+      "email": "sales@brightpathlogistics.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 80.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 95.0,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 1,
+      "email": "sales@brightpathlogistics.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 55.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 88.75,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 2,
+      "email": "sales@brightpathlogistics.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 55.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 88.75,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 3,
+      "email": "priya.kapoor@meridiansteelworks.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 80.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 95.0,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 4,
+      "email": "p.kapoor@meridiansteelworks.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 80.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 95.0,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 5,
+      "email": "test@test.com",
+      "completeness": 75.0,
+      "validity": 26.666666666666668,
+      "freshness": 30.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 45.0,
+      "worst_dimension": "validity"
+    },
+    {
+      "index": 6,
+      "email": "asdf@asdf",
+      "completeness": 65.0,
+      "validity": 20.0,
+      "freshness": 30.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 45.0,
+      "worst_dimension": "validity"
+    },
+    {
+      "index": 7,
+      "email": null,
+      "completeness": 70.0,
+      "validity": 100.0,
+      "freshness": 30.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 73.5,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 8,
+      "email": "notanemailnodomain",
+      "completeness": 100.0,
+      "validity": 50.0,
+      "freshness": 55.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 76.25,
+      "worst_dimension": "validity"
+    },
+    {
+      "index": 9,
+      "email": "arjun.desai@ferrotechalloys.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 10.0,
+      "ownership": 100.0,
+      "consistency": 20.0,
+      "overall": 69.5,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 10,
+      "email": "nisha.pillai@granitewaveexports.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 10.0,
+      "ownership": 100.0,
+      "consistency": 20.0,
+      "overall": 69.5,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 11,
+      "email": "manoj.iyengar@haldiaportservices.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 10.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 77.5,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 12,
+      "email": "reema.chowdhury@vantagepolymers.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 10.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 77.5,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 13,
+      "email": "sanjay.oberoi@duneshieldcement.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 10.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 77.5,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 14,
+      "email": "kiran.vora@northstarfabrication.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 80.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 95.0,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 15,
+      "email": "tanvi.saxena@orionvalveworks.com",
+      "completeness": 85.0,
+      "validity": 100.0,
+      "freshness": 80.0,
+      "ownership": 0.0,
+      "consistency": 100.0,
+      "overall": 80.5,
+      "worst_dimension": "ownership"
+    },
+    {
+      "index": 16,
+      "email": "harish.menon@sterlingcastparts.com",
+      "completeness": 85.0,
+      "validity": 100.0,
+      "freshness": 80.0,
+      "ownership": 0.0,
+      "consistency": 100.0,
+      "overall": 80.5,
+      "worst_dimension": "ownership"
+    },
+    {
+      "index": 17,
+      "email": "zoya.ansari@bluecrestenergy.com",
+      "completeness": 85.0,
+      "validity": 100.0,
+      "freshness": 55.0,
+      "ownership": 0.0,
+      "consistency": 100.0,
+      "overall": 74.25,
+      "worst_dimension": "ownership"
+    },
+    {
+      "index": 18,
+      "email": "vivaan.chauhan@pinnacleautoparts.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 80.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 95.0,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 19,
+      "email": "meera.krishnan@apexpetrochem.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 80.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 95.0,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 20,
+      "email": "aditya.ranganathan@quantumgears.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 80.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 95.0,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 21,
+      "email": "leela.subramaniam@crestlinepackaging.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 55.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 88.75,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 22,
+      "email": "yusuf.qureshi@titanindustrialgases.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 80.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 95.0,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 23,
+      "email": "ishita.bose@vermillionwires.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 80.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 95.0,
+      "worst_dimension": "freshness"
+    },
+    {
+      "index": 24,
+      "email": "gautam.holla@westernrangeforgings.com",
+      "completeness": 100.0,
+      "validity": 100.0,
+      "freshness": 80.0,
+      "ownership": 100.0,
+      "consistency": 100.0,
+      "overall": 95.0,
+      "worst_dimension": "freshness"
+    }
+  ]
+}

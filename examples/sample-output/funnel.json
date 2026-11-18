@@ -1,0 +1,137 @@
+{
+  "total_deals": 15,
+  "stage_counts": {
+    "appointmentscheduled": 1,
+    "qualifiedtobuy": 2,
+    "presentationscheduled": 2,
+    "decisionmakerboughtin": 1,
+    "contractsent": 1,
+    "closedwon": 4,
+    "closedlost": 3,
+    "somethingcustom": 1
+  },
+  "stage_amounts": {
+    "appointmentscheduled": 8000.0,
+    "qualifiedtobuy": 16000.0,
+    "presentationscheduled": 16000.0,
+    "decisionmakerboughtin": 7500.0,
+    "contractsent": 7500.0,
+    "closedwon": 39000.0,
+    "closedlost": 27500.0,
+    "somethingcustom": 2000.0
+  },
+  "conversion": [
+    {
+      "from_stage": "appointmentscheduled",
+      "to_stage": "qualifiedtobuy",
+      "from_count": 11,
+      "to_count": 10,
+      "rate": 0.9090909090909091
+    },
+    {
+      "from_stage": "qualifiedtobuy",
+      "to_stage": "presentationscheduled",
+      "from_count": 10,
+      "to_count": 8,
+      "rate": 0.8
+    },
+    {
+      "from_stage": "presentationscheduled",
+      "to_stage": "decisionmakerboughtin",
+      "from_count": 8,
+      "to_count": 6,
+      "rate": 0.75
+    },
+    {
+      "from_stage": "decisionmakerboughtin",
+      "to_stage": "contractsent",
+      "from_count": 6,
+      "to_count": 5,
+      "rate": 0.8333333333333334
+    },
+    {
+      "from_stage": "contractsent",
+      "to_stage": "closedwon",
+      "from_count": 5,
+      "to_count": 4,
+      "rate": 0.8
+    }
+  ],
+  "stalled_deals": [
+    {
+      "id": "5",
+      "dealname": "Deal E Stalled Appointment",
+      "dealstage": "appointmentscheduled",
+      "amount": 8000.0,
+      "days_stale": 110.0,
+      "owner": "owner1"
+    },
+    {
+      "id": "6",
+      "dealname": "Deal F Stalled Qualified",
+      "dealstage": "qualifiedtobuy",
+      "amount": 12000.0,
+      "days_stale": 79.0,
+      "owner": "owner2"
+    },
+    {
+      "id": "7",
+      "dealname": "Deal G Fresh Presentation",
+      "dealstage": "presentationscheduled",
+      "amount": 9000.0,
+      "days_stale": 40.0,
+      "owner": "owner1"
+    },
+    {
+      "id": "8",
+      "dealname": "Deal H Unvalued Fresh",
+      "dealstage": "decisionmakerboughtin",
+      "amount": 7500.0,
+      "days_stale": 45.0,
+      "owner": "owner2"
+    },
+    {
+      "id": "9",
+      "dealname": "Deal I Unvalued Stalled",
+      "dealstage": "contractsent",
+      "amount": 7500.0,
+      "days_stale": 140.0,
+      "owner": "owner1"
+    },
+    {
+      "id": "13",
+      "dealname": "Deal M Epoch Ms Stalled",
+      "dealstage": "presentationscheduled",
+      "amount": 7000.0,
+      "days_stale": 110.0,
+      "owner": "owner3"
+    }
+  ],
+  "stalled_count": 6,
+  "stalled_value": 51000.0,
+  "closedlost_count": 3,
+  "closedlost_value": 27500.0,
+  "leak_total": 53000.0,
+  "leak_by_stage": {
+    "closedlost": 27500.0,
+    "appointmentscheduled": 4000.0,
+    "qualifiedtobuy": 6000.0,
+    "presentationscheduled": 8000.0,
+    "decisionmakerboughtin": 3750.0,
+    "contractsent": 3750.0
+  },
+  "leak_by_owner": {
+    "owner1": 17250.0,
+    "owner2": 24750.0,
+    "owner3": 11000.0
+  },
+  "unvalued_count": 3,
+  "unvalued_deal_ids": [
+    "8",
+    "9",
+    "15"
+  ],
+  "imputed_value": 7500.0,
+  "velocity_median_days": 31.0,
+  "now_ts": 1787097600.0
+}

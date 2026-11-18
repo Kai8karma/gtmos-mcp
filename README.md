@@ -1,12 +1,15 @@
 # gtmos-mcp
 
+[![CI](https://github.com/Kai8karma/gtmos-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/Kai8karma/gtmos-mcp/actions/workflows/ci.yml) [![PyPI](https://img.shields.io/pypi/v/gtmos-mcp.svg)](https://pypi.org/project/gtmos-mcp/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
+
 Read-only CRM audit for Claude: score data integrity, find duplicate clusters and stalled revenue, in your environment through your own token.
 
-An MCP (Model Context Protocol) server that lets Claude Desktop, Claude Code, or any MCP host audit your HubSpot CRM. It runs in your environment, reads with your own HubSpot token, and no new vendor touches your data. Every tool is read-only by construction: nothing in this package writes to a CRM, sends mail, or calls any network API other than your own HubSpot endpoint.
+An MCP (Model Context Protocol) server that lets Claude Desktop, Claude Code, or any MCP host audit your HubSpot CRM. It runs in your environment, reads with your own HubSpot token, and no new vendor touches your data. Every tool is read-only towards the CRM by construction: nothing in this package writes to a CRM, sends mail, or calls any network API other than your own HubSpot endpoint, and a test fails the build if that ever changes. Tools do write report files to your local disk.
 
 - **Zero dependencies.** Pure Python stdlib (`dependencies = []`). Nothing to vet transitively.
-- **Read-only.** Six tools; four audits, a context graph, and a proposal queue that proposes but never applies. No write scopes needed on your token.
-- **Deterministic scoring.** No LLM in the score path; the model reads results, it does not invent them.
+- **Read-only towards the CRM.** Six tools; four audits, a context graph, and a proposal queue that proposes but never applies. No write scopes needed on your token.
+- **Deterministic scoring.** No LLM in the score path; the model reads results, it does not invent them. Every rule is written down in [docs/scoring-methodology.md](docs/scoring-methodology.md), and `as_of` pins the date so the same export always scores the same.
+- **Current protocol.** Speaks MCP 2026-07-28 (stateless) and 2025-06-18 (handshake) from one process, checked against the official SDK client in CI. See [docs/protocol-support.md](docs/protocol-support.md).
 - **Works offline.** Point the tools at a JSON export instead of a live portal and no network call happens at all.
 
 ## Tools
@@ -43,7 +46,7 @@ gtmos mcp --dry-run
 Expected output:
 
 ```
-[dry-run] gtmos mcp would serve 6 tools on stdio (protocol 2025-06-18)
+[dry-run] gtmos mcp would serve 6 tools on stdio (protocol 2026-07-28, 2025-06-18)
   - audit_crm: Score a CRM export or live HubSpot portal for data-integrity leaks.
   - funnel_leak: Analyse deals by stage to find stalled pipeline and where revenue leaks out of the funnel.
   - cortex_scorecard: Score GTM ops health across five dimensions (data quality, lifecycle, routing, automation, reporting) from a CRM export or live HubSpot portal.
@@ -84,6 +87,12 @@ For Claude Code:
 claude mcp add gtmos --env GTMOS_HUBSPOT_TOKEN=<your-hubspot-private-app-token> -- gtmos mcp
 ```
 
+Or install it as a Claude Code plugin, which also adds a `crm-audit` skill and asks for the token in a masked field (Claude Code 2.1.275 or later; `gtmos` must be on your `PATH`):
+
+```
+/plugin install gtmos-mcp --marketplace Kai8karma/gtmos-mcp
+```
+
 Restart the host, then ask: *"Audit my CRM and show me the weakest dimension."*
 
 ### Getting a HubSpot token
@@ -105,6 +114,30 @@ cortex_proposals { "contacts_file": "./contacts.json", "deals_file": "./deals.js
 
 `contacts.json` is a JSON array of contact objects (HubSpot export shape: `properties.email`, `properties.firstname`, ...). See [tests/fixtures/contacts_sample.json](tests/fixtures/contacts_sample.json) and [tests/fixtures/deals_sample.json](tests/fixtures/deals_sample.json) for the exact shapes.
 
+### Options every tool understands
+
+| Option | What it does |
+|--------|--------------|
+| `as_of` | ISO date or datetime to judge the data against. Freshness, SLA and stall checks compare record dates to "now", so without it the same export scores a little lower every day. Pin it to make a score reproducible: the sample export scores 77.5 (B) as of `2026-08-19`. On the CLI it is `--as-of`. |
+| `out_dir` | Where report files are written. |
+
+`funnel_leak` also takes `stage_order`: the internal stage ids of your pipeline, first stage to won stage. The default is HubSpot's stock sales pipeline. A custom pipeline needs its own ids, or its deals are counted but never judged as stalled.
+
+Every tool returns `structuredContent` with its numbers alongside the text summary, so an agent does not have to parse prose. Shapes are shown in [examples/sample-output/TRANSCRIPT.md](examples/sample-output/TRANSCRIPT.md).
+
+### Confine file access
+
+Paths in a tool call come from the model. By default the server can read and write wherever its own process can. To restrict it to one folder:
+
+```json
+"env": {
+  "GTMOS_HUBSPOT_TOKEN": "<your-hubspot-private-app-token>",
+  "GTMOS_ALLOWED_DIR": "/path/to/a/working/folder"
+}
+```
+
+Relative paths then resolve inside that folder, and anything outside it is refused. The full account of what the server can touch is in [SECURITY.md](SECURITY.md).
+
 ## Marketing Cortex
 
 A marketing Cortex is three layers: a context graph, a signal layer, and governed agents. All three ship here, all read-only, all working fully offline against a contacts/deals export - no HubSpot token required.
@@ -113,7 +146,7 @@ A marketing Cortex is three layers: a context graph, a signal layer, and governe
 |-------|-------|--------------|
 | Signal layer | `cortex_scorecard`, `ops_signals` | The scorecard grades data quality, lifecycle, routing, automation, and reporting into one weighted composite with severity-ranked, sequenced fixes: a single number and a punch list instead of five reports. Signals are the sibling read, a terse list of what is breaking in the stack itself (SLA breaches, property drift, sync-failure proxies) rather than a grade. |
 | Context graph | `cortex_graph` | Contacts, accounts (by corporate email domain, falling back to company name), owners, sources, and deals as nodes; edges only where a record carries an explicit property for them. A deal with no explicit association stays unlinked and is counted as such - it is never attached to an account by guessing from its name. The per-account rollup is what the agents read. |
-| Governed agents | `cortex_proposals` | Six deterministic agents read the graph: **router** (unrouted contacts to the account's dominant owner), **deduper** (clusters into the most complete record), **lifecycle steward** (missing stage, backed by deal or touch evidence), **attribution steward** (conflicting or missing source to the domain majority), **pipeline steward** (stalled deals to owner review), **schema steward** (never-populated properties to retire). Each proposal carries targets, before/after, evidence, confidence, and blast radius. |
+| Governed agents | `cortex_proposals` | Six deterministic agents read the graph: **router** (unrouted contacts to the account's dominant owner), **deduper** (clusters into the most complete record), **lifecycle steward** (missing stage, backed by deal or touch evidence), **attribution steward** (conflicting or missing source to the domain majority), **pipeline steward** (stalled deals to owner review), **schema steward** (never-populated properties to retire). Each proposal carries targets, before/after, evidence, confidence, and blast radius. The deduper only proposes a merge when the email matches or the first name, last name and company all agree; contacts who merely share a surname and an employer are listed as possible duplicates for a person to review. |
 
 The governance is the point. Every proposal passes a policy before it is shown - action allow-list, blast-radius cap (records and share of universe), confidence floor - and a proposal that fails stays in the output as BLOCKED with the reason, so you can see what the agents wanted and why they were stopped. Nothing is applied by this package: the queue is for a human, or for a separately authorized system, to act on. Override the defaults with a policy file; `requires_human` is not a setting and cannot be turned off:
 
@@ -150,6 +183,7 @@ The same engines run directly from the shell:
 
 ```bash
 gtmos audit --input contacts.json --acv 9000       # contact integrity audit
+gtmos audit --input contacts.json --as-of 2026-08-19   # same audit, pinned date, reproducible score
 gtmos cortex --input contacts.json --deals deals.json  # GTM ops health scorecard
 gtmos cortex --graph --input contacts.json --deals deals.json --account acme.com   # context graph, one account
 gtmos cortex --proposals --input contacts.json --deals deals.json --policy policy.json  # governed proposal queue
@@ -158,7 +192,7 @@ gtmos calibrate --scores s.json --outcomes o.json  # grade the scorer against re
 
 ## Architecture
 
-Newline-delimited JSON-RPC 2.0 over stdio, per the MCP stdio transport. The protocol handler (`handle_message`) is a pure function, message in, response out, so the whole surface is testable without spawning a process. The scoring engines are deterministic and network-free; the only network code is the optional HubSpot fetch, using your token, from your machine.
+Newline-delimited JSON-RPC 2.0 over stdio, per the MCP stdio transport. The protocol handler (`handle_message`) is a pure function, message in, response out, so the whole surface is testable without spawning a process. It keeps no state between requests: a request that names its protocol version in `_meta` is answered as MCP 2026-07-28, and one that does not is answered with the 2025-06-18 handshake semantics. No malformed message can end the process. The scoring engines are deterministic and network-free; the only network code is the optional HubSpot fetch, using your token, from your machine.
 
 ```
 gtmos/
@@ -175,7 +209,15 @@ gtmos/
 python -m pytest tests/
 ```
 
-112 tests, all offline, no token required.
+189 tests, all offline, no token required. `scripts/interop_check.py` additionally drives the server with the official MCP Python SDK client (`pip install -e ".[interop]"`).
+
+## More
+
+- [docs/scoring-methodology.md](docs/scoring-methodology.md): every weight, threshold and rule
+- [docs/protocol-support.md](docs/protocol-support.md): what is implemented in each MCP revision, and what is not
+- [examples/](examples/): a sample export and everything the tools produce from it
+- [evals/](evals/README.md): how to grade the scores against real outcomes
+- [SECURITY.md](SECURITY.md) · [CONTRIBUTING.md](CONTRIBUTING.md) · [CHANGELOG.md](CHANGELOG.md)
 
 ## License
 

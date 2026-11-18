@@ -1,0 +1,234 @@
+{
+  "generated": "2026-11-18T16:35:52+00:00",
+  "policy": {
+    "name": "strict",
+    "allowed_actions": [
+      "assign_owner",
+      "merge_duplicates",
+      "review_stalled_deal"
+    ],
+    "max_blast_records": 10,
+    "max_blast_share": 0.1,
+    "min_confidence": 0.8,
+    "requires_human": true
+  },
+  "total_contacts": 25,
+  "total_deals": 15,
+  "agents_run": [
+    "router",
+    "deduper",
+    "lifecycle_steward",
+    "attribution_steward",
+    "pipeline_steward",
+    "schema_steward"
+  ],
+  "proposed": 7,
+  "blocked": 2,
+  "proposals": [
+    {
+      "id": "P-001",
+      "agent": "pipeline_steward",
+      "action": "review_stalled_deal",
+      "severity": "CRITICAL",
+      "targets": [
+        "Deal E Stalled Appointment"
+      ],
+      "before": "stage appointmentscheduled, 110d idle, $8,000, owner owner1",
+      "after": "owner owner1 logs a next step or moves the deal to closedlost",
+      "evidence": [
+        "no activity for 110 days against a 21d stall threshold"
+      ],
+      "confidence": 0.8,
+      "blast_radius": 1,
+      "blast_share": 0.06666666666666667,
+      "universe": "deals",
+      "sequence": "week_1",
+      "policy": "strict",
+      "status": "PROPOSED",
+      "blocked_reason": null
+    },
+    {
+      "id": "P-002",
+      "agent": "pipeline_steward",
+      "action": "review_stalled_deal",
+      "severity": "CRITICAL",
+      "targets": [
+        "Deal F Stalled Qualified"
+      ],
+      "before": "stage qualifiedtobuy, 79d idle, $12,000, owner owner2",
+      "after": "owner owner2 logs a next step or moves the deal to closedlost",
+      "evidence": [
+        "no activity for 79 days against a 21d stall threshold"
+      ],
+      "confidence": 0.8,
+      "blast_radius": 1,
+      "blast_share": 0.06666666666666667,
+      "universe": "deals",
+      "sequence": "week_1",
+      "policy": "strict",
+      "status": "PROPOSED",
+      "blocked_reason": null
+    },
+    {
+      "id": "P-003",
+      "agent": "pipeline_steward",
+      "action": "review_stalled_deal",
+      "severity": "CRITICAL",
+      "targets": [
+        "Deal H Unvalued Fresh"
+      ],
+      "before": "stage decisionmakerboughtin, 45d idle, $7,500, owner owner2",
+      "after": "owner owner2 logs a next step or moves the deal to closedlost",
+      "evidence": [
+        "no activity for 45 days against a 21d stall threshold"
+      ],
+      "confidence": 0.8,
+      "blast_radius": 1,
+      "blast_share": 0.06666666666666667,
+      "universe": "deals",
+      "sequence": "week_1",
+      "policy": "strict",
+      "status": "PROPOSED",
+      "blocked_reason": null
+    },
+    {
+      "id": "P-004",
+      "agent": "pipeline_steward",
+      "action": "review_stalled_deal",
+      "severity": "CRITICAL",
+      "targets": [
+        "Deal I Unvalued Stalled"
+      ],
+      "before": "stage contractsent, 140d idle, $7,500, owner owner1",
+      "after": "owner owner1 logs a next step or moves the deal to closedlost",
+      "evidence": [
+        "no activity for 140 days against a 21d stall threshold"
+      ],
+      "confidence": 0.8,
+      "blast_radius": 1,
+      "blast_share": 0.06666666666666667,
+      "universe": "deals",
+      "sequence": "week_1",
+      "policy": "strict",
+      "status": "PROPOSED",
+      "blocked_reason": null
+    },
+    {
+      "id": "P-005",
+      "agent": "pipeline_steward",
+      "action": "review_stalled_deal",
+      "severity": "CRITICAL",
+      "targets": [
+        "Deal M Epoch Ms Stalled"
+      ],
+      "before": "stage presentationscheduled, 110d idle, $7,000, owner owner3",
+      "after": "owner owner3 logs a next step or moves the deal to closedlost",
+      "evidence": [
+        "no activity for 110 days against a 21d stall threshold"
+      ],
+      "confidence": 0.8,
+      "blast_radius": 1,
+      "blast_share": 0.06666666666666667,
+      "universe": "deals",
+      "sequence": "week_1",
+      "policy": "strict",
+      "status": "PROPOSED",
+      "blocked_reason": null
+    },
+    {
+      "id": "P-006",
+      "agent": "deduper",
+      "action": "merge_duplicates",
+      "severity": "SERIOUS",
+      "targets": [
+        "sales@brightpathlogistics.com",
+        "sales@brightpathlogistics.com",
+        "sales@brightpathlogistics.com"
+      ],
+      "before": "3 separate records (exact_email: sales@brightpathlogistics.com)",
+      "after": "1 record - merge into #0 sales@brightpathlogistics.com (record score 95), keep the most complete value per field",
+      "evidence": [
+        "exact_email match on 'sales@brightpathlogistics.com'",
+        "survivor #0 scores 95, highest in the cluster"
+      ],
+      "confidence": 0.9,
+      "blast_radius": 3,
+      "blast_share": 0.12,
+      "universe": "contacts",
+      "sequence": "weeks_2_4",
+      "policy": "strict",
+      "status": "PROPOSED",
+      "blocked_reason": null
+    },
+    {
+      "id": "P-007",
+      "agent": "pipeline_steward",
+      "action": "review_stalled_deal",
+      "severity": "SERIOUS",
+      "targets": [
+        "Deal G Fresh Presentation"
+      ],
+      "before": "stage presentationscheduled, 40d idle, $9,000, owner owner1",
+      "after": "owner owner1 logs a next step or moves the deal to closedlost",
+      "evidence": [
+        "no activity for 40 days against a 21d stall threshold"
+      ],
+      "confidence": 0.8,
+      "blast_radius": 1,
+      "blast_share": 0.06666666666666667,
+      "universe": "deals",
+      "sequence": "weeks_2_4",
+      "policy": "strict",
+      "status": "PROPOSED",
+      "blocked_reason": null
+    },
+    {
+      "id": "P-008",
+      "agent": "router",
+      "action": "assign_owner",
+      "severity": "SERIOUS",
+      "targets": [
+        "zoya.ansari@bluecrestenergy.com",
+        "tanvi.saxena@orionvalveworks.com",
+        "harish.menon@sterlingcastparts.com"
+      ],
+      "before": "owner = (none)",
+      "after": "owner = (human pick: no owner precedent at these accounts)",
+      "evidence": [
+        "3 unowned contact(s) sit at accounts where no other contact has an owner either"
+      ],
+      "confidence": 0.3,
+      "blast_radius": 3,
+      "blast_share": 0.12,
+      "universe": "contacts",
+      "sequence": "weeks_2_4",
+      "policy": "strict",
+      "status": "BLOCKED",
+      "blocked_reason": "confidence 0.30 is below the 0.80 floor - needs a human decision"
+    },
+    {
+      "id": "P-009",
+      "agent": "deduper",
+      "action": "merge_duplicates",
+      "severity": "WATCH",
+      "targets": [
+        "priya.kapoor@meridiansteelworks.com",
+        "p.kapoor@meridiansteelworks.com"
+      ],
+      "before": "2 separate records (fuzzy_name_company: priya kapoor / meridian steelworks)",
+      "after": "1 record - merge into #3 priya.kapoor@meridiansteelworks.com (record score 95), keep the most complete value per field",
+      "evidence": [
+        "fuzzy_name_company match on 'priya kapoor / meridian steelworks'",
+        "survivor #3 scores 95, highest in the cluster"
+      ],
+      "confidence": 0.6,
+      "blast_radius": 2,
+      "blast_share": 0.08,
+      "universe": "contacts",
+      "sequence": "quarter",
+      "policy": "strict",
+      "status": "BLOCKED",
+      "blocked_reason": "confidence 0.60 is below the 0.80 floor - needs a human decision"
+    }
+  ]
+}

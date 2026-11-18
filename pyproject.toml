@@ -1,6 +1,6 @@
 [project]
 name = "gtmos-mcp"
-version = "0.5.0"
+version = "0.6.0"
 description = "Read-only CRM audit for Claude over MCP: score data integrity, find duplicate clusters and stalled revenue, in your environment through your own token."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -16,9 +16,17 @@ classifiers = [
   "Operating System :: OS Independent",
 ]
 
+[project.optional-dependencies]
+# The package itself has no runtime dependencies. These are for working on it.
+dev = ["pytest>=8", "ruff==0.17.5", "build>=1.2"]
+# Only for scripts/interop_check.py, which drives the server with the official client.
+interop = ["mcp>=2,<3"]
+
 [project.urls]
 Homepage = "https://kai8karma.github.io/agentkai/"
 Repository = "https://github.com/Kai8karma/gtmos-mcp"
+Changelog = "https://github.com/Kai8karma/gtmos-mcp/blob/master/CHANGELOG.md"
+Issues = "https://github.com/Kai8karma/gtmos-mcp/issues"
 
 [project.scripts]
 gtmos = "gtmos.cli:main"
@@ -29,3 +37,14 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 include = ["gtmos*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 160
+target-version = "py311"
+
+[tool.ruff.lint]
+# Gate on real defects (syntax errors, undefined names, unused imports), not style.
+select = ["E9", "F"]

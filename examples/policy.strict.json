@@ -1,0 +1,7 @@
+{
+  "name": "strict",
+  "allowed_actions": ["assign_owner", "merge_duplicates", "review_stalled_deal"],
+  "max_blast_records": 10,
+  "max_blast_share": 0.10,
+  "min_confidence": 0.8
+}
